@@ -1,0 +1,30 @@
+# Python
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# uv
+.uv/
+
+# Node
+node_modules/
+
+# Generated output (decks, exports)
+/out/
+out/
+*.pptx.bak
+
+# OS / editor cruft
+.DS_Store
+.idea/
+.vscode/
+
+# Scratch / local working files
+scratch/

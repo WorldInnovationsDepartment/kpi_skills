@@ -1,0 +1,32 @@
+{
+  "name": "kpi-skills",
+  "owner": {
+    "name": "Danylo Vorvul",
+    "email": "danylo.vorvul@meridian-ai.com"
+  },
+  "description": "Local marketplace that ships exactly one plugin: kpi-skills, a collection of skills gathered along a PhD path at KPI (Igor Sikorsky Kyiv Polytechnic Institute).",
+  "version": "0.1.0",
+  "plugins": [
+    {
+      "name": "kpi-skills",
+      "displayName": "KPI Skills",
+      "description": "A collection of Claude Code skills gathered along a PhD path at Igor Sikorsky Kyiv Polytechnic Institute (KPI).",
+      "source": "./",
+      "version": "0.1.0",
+      "author": {
+        "name": "Danylo Vorvul",
+        "email": "danylo.vorvul@meridian-ai.com"
+      },
+      "license": "MIT",
+      "keywords": [
+        "phd",
+        "academia",
+        "kpi",
+        "sikorsky",
+        "presentation",
+        "reporting"
+      ],
+      "defaultEnabled": true
+    }
+  ]
+}
