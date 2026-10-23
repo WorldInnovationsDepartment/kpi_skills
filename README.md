@@ -9,6 +9,7 @@ This repository is both a Claude Code **plugin** and its own **marketplace** —
 | Skill | Namespaced name | What it does |
 |---|---|---|
 | `phd-report-presentation` | `kpi-skills:phd-report-presentation` | Generates a KPI-branded PhD semester/attestation report presentation (`.pptx`) from a JSON content spec, using a bundled brand template (navy/Exo 2 KPI style) and a build + preview-render + visual-check loop. Can also update/regenerate an existing deck. |
+| `asac-paper-format` | `kpi-skills:asac-paper-format` | Formats and checks a paper for the KPI journal «Адаптивні системи автоматичного управління» ([asac.kpi.ua](https://asac.kpi.ua)): Markdown+YAML source → journal-compliant `.docx` (A4, TNR 13, 1.3, native numbered equations, DSTU 8302:2015 references, UA+EN structured abstracts and author info on separate end pages), plus a rule-by-rule compliance report. Can import an existing `.docx`/`.tex` draft. |
 
 ### `phd-report-presentation`
 
@@ -59,6 +60,45 @@ This repository is both a Claude Code **plugin** and its own **marketplace** —
   `skills/phd-report-presentation/scripts/README.md` for details and the
   re-verification steps to run afterward.
 
+### `asac-paper-format`
+
+- **Triggers:** "format my paper for ASAC", "підготуй статтю до «Адаптивні системи
+  автоматичного управління»", "asac.kpi.ua", "check my article against the journal's
+  requirements", or a revised resubmission for that journal.
+- **Requirements:** [`uv`](https://docs.astral.sh/uv/) (the scripts are PEP 723 and
+  bring their own python-docx, PyYAML, PyMuPDF and a bundled pandoc via
+  `pypandoc_binary`); LibreOffice (`soffice`) optional, only for the PDF preview and
+  the exact page count; Times New Roman installed for a faithful preview.
+- **Quick start:**
+  ```bash
+  S=skills/asac-paper-format
+  uv run $S/scripts/import_source.py draft.docx --out work/paper.md   # or copy $S/assets/example/paper.md
+  uv run $S/scripts/build_paper.py work/paper.md --out work/paper.docx --verbose
+  uv run $S/scripts/render_preview.py work/paper.docx --out work/preview
+  uv run $S/scripts/check_paper.py work/paper.md --docx work/paper.docx --pdf work/preview/paper.pdf
+  ```
+- **Internal layout** (`skills/asac-paper-format/`):
+  ```
+  SKILL.md                     # workflow Claude follows (intake -> content pass -> build/check loop -> deliver)
+  scripts/
+  ├── build_paper.py           # paper.md -> journal-formatted .docx (pandoc + python-docx post-processing)
+  ├── check_paper.py           # ERROR/WARN/INFO report against every journal rule (source, .docx, PDF)
+  ├── import_source.py         # .docx/.tex/.odt/.md draft -> paper.md skeleton with TODOs
+  ├── render_preview.py        # .docx -> PDF + page PNGs + contact sheet (needs soffice)
+  └── asac_common.py           # shared parsing/labels for the scripts above
+  references/
+  ├── requirements.md          # every journal rule, its source (asac.kpi.ua, 2026-10-23) and its checker code
+  ├── published-papers-review.md  # review of three 2026 papers: house style vs. the guide
+  ├── reference-style.md       # DSTU 8302:2015 in the journal's form, with templates
+  └── manuscript-format.md     # paper.md front-matter fields and body syntax
+  assets/
+  ├── official/sample_{eng,ua}.docx   # the journal's own templates (as published on asac.kpi.ua)
+  └── example/paper.md, fig1.png      # complete worked example (fictional authors)
+  ```
+- **When the journal changes its rules:** update `references/requirements.md`, the
+  constants/labels in `scripts/asac_common.py` and `scripts/build_paper.py`, and
+  `tests/asac-paper-format/test_asac.py` together.
+
 ## Repository layout
 
 ```
@@ -67,11 +107,16 @@ kpi_skills/
 │   ├── plugin.json          # plugin manifest (name, version, author, keywords)
 │   └── marketplace.json     # self-hosted marketplace listing this same plugin via "source": "./"
 ├── skills/
-│   └── phd-report-presentation/
-│       ├── SKILL.md         # skill entry point (frontmatter + instructions)
-│       ├── scripts/         # build_deck.py, render_preview.py, make_template.py
-│       ├── references/      # spec-schema.md, style-guide.md, report-structure.md
-│       └── assets/          # template.pptx, example-spec.json, fonts/
+│   ├── phd-report-presentation/
+│   │   ├── SKILL.md         # skill entry point (frontmatter + instructions)
+│   │   ├── scripts/         # build_deck.py, render_preview.py, make_template.py
+│   │   ├── references/      # spec-schema.md, style-guide.md, report-structure.md
+│   │   └── assets/          # template.pptx, example-spec.json, fonts/
+│   └── asac-paper-format/
+│       ├── SKILL.md
+│       ├── scripts/         # build_paper.py, check_paper.py, import_source.py, render_preview.py
+│       ├── references/      # requirements.md, published-papers-review.md, reference-style.md, ...
+│       └── assets/          # official journal templates, worked example
 ├── .gitignore
 └── README.md
 ```
@@ -79,6 +124,15 @@ kpi_skills/
 `.claude-plugin/` contains **only** the two manifest files — every other component (skills, commands, agents, hooks, etc.) lives at the repository root per the Claude Code plugin spec.
 
 ## Tests
+
+`tests/asac-paper-format/test_asac.py` is the same kind of plain-assert suite for the
+`asac-paper-format` skill (build layout against the journal rules, a Ukrainian
+manuscript, build errors, every major checker rule, the importer, and, with
+LibreOffice installed, rendering and the page count):
+
+```bash
+uv run tests/asac-paper-format/test_asac.py
+```
 
 `tests/phd-report-presentation/test_build.py` is a plain-assert (no pytest)
 regression suite for the `phd-report-presentation` skill scripts
