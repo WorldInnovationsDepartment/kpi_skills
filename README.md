@@ -11,7 +11,42 @@ This repository is both a Claude Code **plugin** and its own **marketplace** —
 | `phd-report-presentation` | `kpi-skills:phd-report-presentation` | Generates a KPI-branded PhD semester/attestation report presentation (`.pptx`) from a JSON content spec, using a bundled brand template (navy/Exo 2 KPI style) and a build + preview-render + visual-check loop. Can also update/regenerate an existing deck. |
 | `asac-paper-format` | `kpi-skills:asac-paper-format` | Formats and checks a paper for the KPI journal «Адаптивні системи автоматичного управління» ([asac.kpi.ua](https://asac.kpi.ua)): Markdown+YAML source → journal-compliant `.docx` (A4, TNR 13, 1.3, native numbered equations, DSTU 8302:2015 references, UA+EN structured abstracts and author info on separate end pages), plus a rule-by-rule compliance report. Can import an existing `.docx`/`.tex` draft. |
 | `axioms-paper-format` | `kpi-skills:axioms-paper-format` | Formats and checks a mathematics paper for the MDPI journal *Axioms* ([mdpi.com/journal/axioms](https://www.mdpi.com/journal/axioms)) on the official MDPI LaTeX class (`Definitions/mdpi.cls`, option `axioms`, bundled): imports a LaTeX/Word/Markdown draft (theorem environments mapped to the class ones with global numbering, front/back matter moved into MDPI macros), checks the sourced journal rules (abstract ≤ ~200 words, 3–10 keywords, MSC2020, CRediT/funding/data/COI statements, MDPI/ACS references with ISO 4 abbreviations and DOIs, floats, citations), compiles, previews and packages the SuSy zip with a cover letter. |
+| `lnns-paper-format` | `kpi-skills:lnns-paper-format` | Formats and checks a paper for Springer's **Lecture Notes in Networks and Systems** (LNNS, [series page](https://link.springer.com/bookseries/15179)) in the proceedings template (llncs): Markdown+YAML source → Word `.docx` in the splnproc layout (122 × 193 mm, Times 10 pt, numbered headings, run-in level 3/4, bold "Fig. N."/"Table N." captions, numbered equations, Acknowledgments + Disclosure of Interests, splncs04 references) and/or an Overleaf-ready llncs LaTeX project, plus a rule-by-rule compliance report (abstract 150-250 words, title case, ORCID, one corresponding author, citation order, DOIs, alt text, conference page limit, Type 3 fonts). Sourced from Springer's 2026 instructions and a review of three 2025-2026 LNNS papers. |
 | `vottp-paper-format` | `kpi-skills:vottp-paper-format` | Formats and checks manuscripts for «Вимірювальна та обчислювальна техніка в технологічних процесах» ([vottp.khmnu.edu.ua](https://vottp.khmnu.edu.ua)): sourced requirements, three recent paper reviews, DOCX layout with content preservation, and a manual formatting/content compliance report. Records conflicting journal instructions explicitly. |
+| `phd-seminar-review` | `kpi-skills:phd-seminar-review` | Reviews the **content** of a PhD seminar / council / defence talk for specialty **121 «Інженерія програмного забезпечення»** at KPI (`.ppt`/`.pptx`/`.odp`/`.key`/`.pdf`): required elements, scientific novelty wording, the KPI 121 rule that one result must be a software **architecture**, tasks↔novelty↔conclusions, publication credit under Порядок №44, language and readability; writes a slide-by-slide report with fixes and likely council questions. |
+
+### `phd-seminar-review`
+
+- **Triggers:** "перевір презентацію на семінар", "чи готова презентація до вченої ради",
+  "review my dissertation defence slides", or any request to check/verify a PhD seminar,
+  council or defence talk for specialty 121 (F2), optionally against the dissertation text.
+- **Requirements:** [`uv`](https://docs.astral.sh/uv/) (PEP 723 scripts: python-pptx,
+  python-docx, PyMuPDF, Pillow); LibreOffice (`soffice`) for `.ppt`/`.odp`/`.key` input and the
+  PNG preview (`.pptx` and `.pdf` work without it).
+- **Quick start:**
+  ```bash
+  S=skills/phd-seminar-review/scripts
+  uv run $S/check_deck.py talk.ppt --minutes 20 --json review/findings.json [--dissertation diss.docx]
+  uv run $S/extract_deck.py talk.ppt --out review      # review/deck.md for the content review
+  uv run $S/render_preview.py talk.ppt --out review/preview
+  ```
+  Then Claude goes through `references/review-checklist.md` and writes `review/report.md`.
+- **Internal layout** (`skills/phd-seminar-review/`):
+  ```
+  SKILL.md                    # workflow: intake -> automatic checks -> content review -> visual check -> report
+  scripts/
+  ├── check_deck.py           # ERROR/WARN/INFO findings with rule codes + detected structure
+  ├── extract_deck.py         # slide-by-slide deck.md / deck.json
+  ├── render_preview.py       # deck -> PDF -> slide PNGs + contact sheet (needs soffice)
+  └── deck_common.py          # loading .pptx/.ppt/.pdf, section detection, dissertation text
+  references/
+  ├── requirements.md         # Порядок №44 (incl. № 1240/2026), Порядок №261, наказ МОН №40, KPI rules, 121 scope, architecture rule — with sources
+  ├── rules.md                # every rule code, severity and source
+  ├── review-checklist.md     # manual content review + typical council questions
+  └── sample-structure.md     # anonymised structure of a real 121 KPI defence talk and what the skill flags
+  ```
+- **When the rules change:** update `references/requirements.md`, `references/rules.md`,
+  `scripts/check_deck.py` and `tests/phd-seminar-review/test_seminar.py` together.
 
 ### `phd-report-presentation`
 
@@ -85,6 +120,47 @@ This repository is both a Claude Code **plugin** and its own **marketplace** —
   abstract-length and other conflicting instructions remain visible in the report.
 - **Validation:** `uv run tests/vottp-paper-format/test_vottp.py` checks both profiles,
   preservation of equations/media/links/tables, and failure handling.
+
+### `lnns-paper-format`
+
+- **Triggers:** "format my paper for LNNS", "Lecture Notes in Networks and Systems",
+  "prepare the camera-ready for the Springer LNNS proceedings", "check my paper against the
+  llncs template", or a draft for any conference that publishes in LNNS.
+- **Requirements:** [`uv`](https://docs.astral.sh/uv/) (PEP 723 scripts: python-docx, PyYAML,
+  PyMuPDF, Pillow, and pandoc via `pypandoc_binary`); LibreOffice (`soffice`), optional, for the
+  PDF preview of the `.docx`; a TeX engine, optional, for `--compile` (otherwise upload the LaTeX
+  folder to Overleaf).
+- **Quick start:**
+  ```bash
+  S=skills/lnns-paper-format/scripts
+  uv run $S/import_source.py draft.docx --out work/paper.md   # or copy skills/lnns-paper-format/assets/example/paper.md
+  uv run $S/renumber_refs.py work/paper.md --order citation   # or alphabetical
+  uv run $S/build_paper.py work/paper.md --docx work/paper.docx --latex work/latex --verbose
+  uv run $S/render_preview.py work/paper.docx --out work/preview
+  uv run $S/check_paper.py work/paper.md --docx work/paper.docx --pdf work/preview/paper.pdf
+  ```
+- **Internal layout** (`skills/lnns-paper-format/`):
+  ```
+  SKILL.md                     # workflow: conference intake -> content pass -> build/check loop -> deliver
+  scripts/
+  ├── build_paper.py           # paper.md -> splnproc-layout .docx and/or llncs LaTeX project (pandoc + Lua filter)
+  ├── check_paper.py           # ERROR/WARN/INFO report against every rule (source, .docx, final PDF)
+  ├── renumber_refs.py         # reorder references (citation/alphabetical) and renumber every [n] in the body
+  ├── import_source.py         # .docx/.tex/.odt/.md draft -> paper.md skeleton with TODOs
+  ├── render_preview.py        # .docx (via soffice) or .pdf -> page PNGs + contact sheet
+  └── lnns_common.py           # shared layout constants, source parsing, citations
+  references/
+  ├── requirements.md          # every Springer/LNNS rule, its source (2026-10-25) and its checker code
+  ├── published-papers-review.md  # three 2025-2026 LNNS papers: house style vs. the instructions
+  ├── reference-style.md       # splncs04 with templates and conversions from DSTU/APA/IEEE
+  └── manuscript-format.md     # paper.md front-matter fields and body syntax
+  assets/
+  ├── latex/                   # llncs.cls v2.26 + splncs04.bst (CTAN, CC BY 4.0)
+  └── example/paper.md, fig1.png  # complete worked example (fictional authors)
+  ```
+- **When Springer changes its template:** update `references/requirements.md`, the constants in
+  `scripts/lnns_common.py` / `scripts/build_paper.py`, `assets/latex/` and
+  `tests/lnns-paper-format/test_lnns.py` together.
 
 ### `axioms-paper-format`
 
@@ -165,17 +241,7 @@ This repository is both a Claude Code **plugin** and its own **marketplace** —
   ```
 - **When the journal changes its rules:** update `references/requirements.md`, the
   constants/labels in `scripts/asac_common.py` and `scripts/build_paper.py`, and
-  `tests/axioms-paper-format/test_axioms.py` is a plain-assert suite for the
-`axioms-paper-format` skill: the shipped example (0 errors, 0 warnings), the importer on
-amsart, article-class and Markdown drafts and the `--new` skeleton, every major checker rule
-on deliberately broken manuscripts and `.bib` files, log/PDF checks, the SuSy zip, the
-preview, and (when a TeX engine is installed) a real compile of the example:
-
-```bash
-uv run tests/axioms-paper-format/test_axioms.py
-```
-
-`tests/asac-paper-format/test_asac.py` together.
+  `tests/asac-paper-format/test_asac.py` together.
 
 ## Repository layout
 
@@ -200,10 +266,14 @@ kpi_skills/
 │   │   ├── scripts/         # build_paper.py, check_paper.py, import_source.py, render_preview.py
 │   │   ├── references/      # requirements.md, published-papers-review.md, reference-style.md, ...
 │   │   └── assets/          # official journal templates, worked example
-│   └── vottp-paper-format/
+│   ├── vottp-paper-format/
+│   │   ├── SKILL.md
+│   │   ├── scripts/         # vottp_docx.py: inspect, format and layout/preservation checks
+│   │   └── references/      # requirements, three-paper review, formatting workflow
+│   └── phd-seminar-review/
 │       ├── SKILL.md
-│       ├── scripts/         # vottp_docx.py: inspect, format and layout/preservation checks
-│       └── references/      # requirements, three-paper review, formatting workflow
+│       ├── scripts/         # check_deck.py, extract_deck.py, render_preview.py, deck_common.py
+│       └── references/      # requirements.md, rules.md, review-checklist.md, sample-structure.md
 ├── .gitignore
 └── README.md
 ```
@@ -218,6 +288,33 @@ including stale role maps and deliberately damaged output:
 
 ```bash
 uv run tests/vottp-paper-format/test_vottp.py
+```
+
+`tests/phd-seminar-review/test_seminar.py` generates synthetic 121 decks with python-pptx
+(no real presentation needed) and checks every major rule, the publication-credit estimate,
+the dissertation cross-check, extraction, and (with LibreOffice) PDF input and the preview:
+
+```bash
+uv run tests/phd-seminar-review/test_seminar.py
+```
+
+`tests/lnns-paper-format/test_lnns.py` checks the `lnns-paper-format` skill the same way:
+the Word layout against Springer's splnproc template, the generated llncs LaTeX, build errors,
+every major checker rule, reference renumbering, the importer (.docx and .tex) and, with
+LibreOffice, rendering and the PDF checks (a TeX engine, if present, also compiles the LaTeX):
+
+```bash
+uv run tests/lnns-paper-format/test_lnns.py
+```
+
+`tests/axioms-paper-format/test_axioms.py` is a plain-assert suite for the
+`axioms-paper-format` skill: the shipped example (0 errors, 0 warnings), the importer on
+amsart, article-class and Markdown drafts and the `--new` skeleton, every major checker rule
+on deliberately broken manuscripts and `.bib` files, log/PDF checks, the SuSy zip, the
+preview, and (when a TeX engine is installed) a real compile of the example:
+
+```bash
+uv run tests/axioms-paper-format/test_axioms.py
 ```
 
 `tests/asac-paper-format/test_asac.py` is the same kind of plain-assert suite for the
