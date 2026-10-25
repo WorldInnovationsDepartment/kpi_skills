@@ -10,6 +10,7 @@ This repository is both a Claude Code **plugin** and its own **marketplace** —
 |---|---|---|
 | `phd-report-presentation` | `kpi-skills:phd-report-presentation` | Generates a KPI-branded PhD semester/attestation report presentation (`.pptx`) from a JSON content spec, using a bundled brand template (navy/Exo 2 KPI style) and a build + preview-render + visual-check loop. Can also update/regenerate an existing deck. |
 | `asac-paper-format` | `kpi-skills:asac-paper-format` | Formats and checks a paper for the KPI journal «Адаптивні системи автоматичного управління» ([asac.kpi.ua](https://asac.kpi.ua)): Markdown+YAML source → journal-compliant `.docx` (A4, TNR 13, 1.3, native numbered equations, DSTU 8302:2015 references, UA+EN structured abstracts and author info on separate end pages), plus a rule-by-rule compliance report. Can import an existing `.docx`/`.tex` draft. |
+| `axioms-paper-format` | `kpi-skills:axioms-paper-format` | Formats and checks a mathematics paper for the MDPI journal *Axioms* ([mdpi.com/journal/axioms](https://www.mdpi.com/journal/axioms)) on the official MDPI LaTeX class (`Definitions/mdpi.cls`, option `axioms`, bundled): imports a LaTeX/Word/Markdown draft (theorem environments mapped to the class ones with global numbering, front/back matter moved into MDPI macros), checks the sourced journal rules (abstract ≤ ~200 words, 3–10 keywords, MSC2020, CRediT/funding/data/COI statements, MDPI/ACS references with ISO 4 abbreviations and DOIs, floats, citations), compiles, previews and packages the SuSy zip with a cover letter. |
 | `lnns-paper-format` | `kpi-skills:lnns-paper-format` | Formats and checks a paper for Springer's **Lecture Notes in Networks and Systems** (LNNS, [series page](https://link.springer.com/bookseries/15179)) in the proceedings template (llncs): Markdown+YAML source → Word `.docx` in the splnproc layout (122 × 193 mm, Times 10 pt, numbered headings, run-in level 3/4, bold "Fig. N."/"Table N." captions, numbered equations, Acknowledgments + Disclosure of Interests, splncs04 references) and/or an Overleaf-ready llncs LaTeX project, plus a rule-by-rule compliance report (abstract 150-250 words, title case, ORCID, one corresponding author, citation order, DOIs, alt text, conference page limit, Type 3 fonts). Sourced from Springer's 2026 instructions and a review of three 2025-2026 LNNS papers. |
 | `vottp-paper-format` | `kpi-skills:vottp-paper-format` | Formats and checks manuscripts for «Вимірювальна та обчислювальна техніка в технологічних процесах» ([vottp.khmnu.edu.ua](https://vottp.khmnu.edu.ua)): sourced requirements, three recent paper reviews, DOCX layout with content preservation, and a manual formatting/content compliance report. Records conflicting journal instructions explicitly. |
 
@@ -127,6 +128,48 @@ This repository is both a Claude Code **plugin** and its own **marketplace** —
   `scripts/lnns_common.py` / `scripts/build_paper.py`, `assets/latex/` and
   `tests/lnns-paper-format/test_lnns.py` together.
 
+### `axioms-paper-format`
+
+- **Triggers:** "format my paper for Axioms", "prepare the manuscript for MDPI Axioms",
+  "check my article against the Axioms requirements", or any request to format, check or
+  convert a paper (or a revision) for *Axioms* (ISSN 2075-1680).
+- **Requirements:** [`uv`](https://docs.astral.sh/uv/) (PEP 723 scripts: pypandoc_binary for
+  Word/Markdown input, PyMuPDF, Pillow). A TeX engine (latexmk/pdflatex from TeX Live or MacTeX,
+  or `tectonic`) is needed only to compile; without one, compile on Overleaf and use
+  `--no-compile` for the zip.
+- **Quick start:**
+  ```bash
+  S=skills/axioms-paper-format/scripts
+  uv run $S/import_source.py draft.tex --out axioms-submission     # or draft.docx / --new
+  uv run $S/check_paper.py axioms-submission/paper.tex              # ERROR/WARN/INFO + SUMMARY
+  uv run $S/build_paper.py axioms-submission/paper.tex --zip        # compile + submission.zip
+  uv run $S/check_paper.py axioms-submission/paper.tex --log axioms-submission/paper.log --pdf axioms-submission/paper.pdf
+  uv run $S/render_preview.py axioms-submission/paper.pdf --out axioms-submission/preview
+  ```
+- **Internal layout** (`skills/axioms-paper-format/`):
+  ```
+  SKILL.md                     # workflow: intake -> import -> content pass -> check/compile/preview -> zip + cover letter
+  scripts/
+  ├── import_source.py         # .tex/.docx/.md draft (or --new) -> paper.tex on the MDPI class + import-report.md
+  ├── check_paper.py           # rule-by-rule check of .tex, .bib, figures, compile log and PDF
+  ├── build_paper.py           # latexmk | pdflatex+bibtex | tectonic; --zip packages the SuSy upload
+  ├── render_preview.py        # PDF -> page PNGs + contact sheet
+  └── axioms_common.py         # LaTeX/BibTeX parsing, class constants, MDPI standard wording
+  references/
+  ├── requirements.md          # every Axioms/MDPI rule, its source (2026-10-25) and its checker code
+  ├── published-papers-review.md   # three Axioms 15(11) papers (algebra, PDE, statistics) and the house style
+  ├── reference-style.md       # MDPI/ACS references, citation rules, ISO 4, DOIs, BibTeX
+  └── latex-conversion.md      # what the importer maps, what to finish by hand, compile errors, Overleaf
+  assets/
+  ├── mdpi-template/           # official MDPI template (template.tex/pdf, Definitions/ with mdpi.cls v6.5d), Axioms Word .dot
+  ├── example/                 # complete Axioms manuscript (paper.tex, references.bib, fig1.png): 0 errors, 0 warnings
+  ├── skeleton.tex             # the template the importer fills
+  └── cover-letter.md          # cover letter with the two required sentences
+  ```
+- **When the rules change:** update `references/requirements.md`, `scripts/check_paper.py`,
+  the bundled `assets/mdpi-template/Definitions/` and `tests/axioms-paper-format/test_axioms.py`
+  together.
+
 ### `asac-paper-format`
 
 - **Triggers:** "format my paper for ASAC", "підготуй статтю до «Адаптивні системи
@@ -179,6 +222,11 @@ kpi_skills/
 │   │   ├── scripts/         # build_deck.py, render_preview.py, make_template.py
 │   │   ├── references/      # spec-schema.md, style-guide.md, report-structure.md
 │   │   └── assets/          # template.pptx, example-spec.json, fonts/
+│   ├── axioms-paper-format/
+│   │   ├── SKILL.md
+│   │   ├── scripts/         # import_source.py, check_paper.py, build_paper.py, render_preview.py
+│   │   ├── references/      # requirements.md, published-papers-review.md, reference-style.md, latex-conversion.md
+│   │   └── assets/          # official MDPI LaTeX template (mdpi.cls), worked example, cover letter
 │   ├── asac-paper-format/
 │   │   ├── SKILL.md
 │   │   ├── scripts/         # build_paper.py, check_paper.py, import_source.py, render_preview.py
@@ -211,6 +259,16 @@ LibreOffice, rendering and the PDF checks (a TeX engine, if present, also compil
 
 ```bash
 uv run tests/lnns-paper-format/test_lnns.py
+```
+
+`tests/axioms-paper-format/test_axioms.py` is a plain-assert suite for the
+`axioms-paper-format` skill: the shipped example (0 errors, 0 warnings), the importer on
+amsart, article-class and Markdown drafts and the `--new` skeleton, every major checker rule
+on deliberately broken manuscripts and `.bib` files, log/PDF checks, the SuSy zip, the
+preview, and (when a TeX engine is installed) a real compile of the example:
+
+```bash
+uv run tests/axioms-paper-format/test_axioms.py
 ```
 
 `tests/asac-paper-format/test_asac.py` is the same kind of plain-assert suite for the
