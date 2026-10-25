@@ -13,6 +13,40 @@ This repository is both a Claude Code **plugin** and its own **marketplace** —
 | `axioms-paper-format` | `kpi-skills:axioms-paper-format` | Formats and checks a mathematics paper for the MDPI journal *Axioms* ([mdpi.com/journal/axioms](https://www.mdpi.com/journal/axioms)) on the official MDPI LaTeX class (`Definitions/mdpi.cls`, option `axioms`, bundled): imports a LaTeX/Word/Markdown draft (theorem environments mapped to the class ones with global numbering, front/back matter moved into MDPI macros), checks the sourced journal rules (abstract ≤ ~200 words, 3–10 keywords, MSC2020, CRediT/funding/data/COI statements, MDPI/ACS references with ISO 4 abbreviations and DOIs, floats, citations), compiles, previews and packages the SuSy zip with a cover letter. |
 | `lnns-paper-format` | `kpi-skills:lnns-paper-format` | Formats and checks a paper for Springer's **Lecture Notes in Networks and Systems** (LNNS, [series page](https://link.springer.com/bookseries/15179)) in the proceedings template (llncs): Markdown+YAML source → Word `.docx` in the splnproc layout (122 × 193 mm, Times 10 pt, numbered headings, run-in level 3/4, bold "Fig. N."/"Table N." captions, numbered equations, Acknowledgments + Disclosure of Interests, splncs04 references) and/or an Overleaf-ready llncs LaTeX project, plus a rule-by-rule compliance report (abstract 150-250 words, title case, ORCID, one corresponding author, citation order, DOIs, alt text, conference page limit, Type 3 fonts). Sourced from Springer's 2026 instructions and a review of three 2025-2026 LNNS papers. |
 | `vottp-paper-format` | `kpi-skills:vottp-paper-format` | Formats and checks manuscripts for «Вимірювальна та обчислювальна техніка в технологічних процесах» ([vottp.khmnu.edu.ua](https://vottp.khmnu.edu.ua)): sourced requirements, three recent paper reviews, DOCX layout with content preservation, and a manual formatting/content compliance report. Records conflicting journal instructions explicitly. |
+| `phd-seminar-review` | `kpi-skills:phd-seminar-review` | Reviews the **content** of a PhD seminar / council / defence talk for specialty **121 «Інженерія програмного забезпечення»** at KPI (`.ppt`/`.pptx`/`.odp`/`.key`/`.pdf`): required elements, scientific novelty wording, the KPI 121 rule that one result must be a software **architecture**, tasks↔novelty↔conclusions, publication credit under Порядок №44, language and readability; writes a slide-by-slide report with fixes and likely council questions. |
+
+### `phd-seminar-review`
+
+- **Triggers:** "перевір презентацію на семінар", "чи готова презентація до вченої ради",
+  "review my dissertation defence slides", or any request to check/verify a PhD seminar,
+  council or defence talk for specialty 121 (F2), optionally against the dissertation text.
+- **Requirements:** [`uv`](https://docs.astral.sh/uv/) (PEP 723 scripts: python-pptx,
+  python-docx, PyMuPDF, Pillow); LibreOffice (`soffice`) for `.ppt`/`.odp`/`.key` input and the
+  PNG preview (`.pptx` and `.pdf` work without it).
+- **Quick start:**
+  ```bash
+  S=skills/phd-seminar-review/scripts
+  uv run $S/check_deck.py talk.ppt --minutes 20 --json review/findings.json [--dissertation diss.docx]
+  uv run $S/extract_deck.py talk.ppt --out review      # review/deck.md for the content review
+  uv run $S/render_preview.py talk.ppt --out review/preview
+  ```
+  Then Claude goes through `references/review-checklist.md` and writes `review/report.md`.
+- **Internal layout** (`skills/phd-seminar-review/`):
+  ```
+  SKILL.md                    # workflow: intake -> automatic checks -> content review -> visual check -> report
+  scripts/
+  ├── check_deck.py           # ERROR/WARN/INFO findings with rule codes + detected structure
+  ├── extract_deck.py         # slide-by-slide deck.md / deck.json
+  ├── render_preview.py       # deck -> PDF -> slide PNGs + contact sheet (needs soffice)
+  └── deck_common.py          # loading .pptx/.ppt/.pdf, section detection, dissertation text
+  references/
+  ├── requirements.md         # Порядок №44 (incl. № 1240/2026), Порядок №261, наказ МОН №40, KPI rules, 121 scope, architecture rule — with sources
+  ├── rules.md                # every rule code, severity and source
+  ├── review-checklist.md     # manual content review + typical council questions
+  └── sample-structure.md     # anonymised structure of a real 121 KPI defence talk and what the skill flags
+  ```
+- **When the rules change:** update `references/requirements.md`, `references/rules.md`,
+  `scripts/check_deck.py` and `tests/phd-seminar-review/test_seminar.py` together.
 
 ### `phd-report-presentation`
 
@@ -232,10 +266,14 @@ kpi_skills/
 │   │   ├── scripts/         # build_paper.py, check_paper.py, import_source.py, render_preview.py
 │   │   ├── references/      # requirements.md, published-papers-review.md, reference-style.md, ...
 │   │   └── assets/          # official journal templates, worked example
-│   └── vottp-paper-format/
+│   ├── vottp-paper-format/
+│   │   ├── SKILL.md
+│   │   ├── scripts/         # vottp_docx.py: inspect, format and layout/preservation checks
+│   │   └── references/      # requirements, three-paper review, formatting workflow
+│   └── phd-seminar-review/
 │       ├── SKILL.md
-│       ├── scripts/         # vottp_docx.py: inspect, format and layout/preservation checks
-│       └── references/      # requirements, three-paper review, formatting workflow
+│       ├── scripts/         # check_deck.py, extract_deck.py, render_preview.py, deck_common.py
+│       └── references/      # requirements.md, rules.md, review-checklist.md, sample-structure.md
 ├── .gitignore
 └── README.md
 ```
@@ -250,6 +288,14 @@ including stale role maps and deliberately damaged output:
 
 ```bash
 uv run tests/vottp-paper-format/test_vottp.py
+```
+
+`tests/phd-seminar-review/test_seminar.py` generates synthetic 121 decks with python-pptx
+(no real presentation needed) and checks every major rule, the publication-credit estimate,
+the dissertation cross-check, extraction, and (with LibreOffice) PDF input and the preview:
+
+```bash
+uv run tests/phd-seminar-review/test_seminar.py
 ```
 
 `tests/lnns-paper-format/test_lnns.py` checks the `lnns-paper-format` skill the same way:
