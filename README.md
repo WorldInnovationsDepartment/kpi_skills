@@ -10,6 +10,7 @@ This repository is both a Claude Code **plugin** and its own **marketplace** —
 |---|---|---|
 | `phd-report-presentation` | `kpi-skills:phd-report-presentation` | Generates a KPI-branded PhD semester/attestation report presentation (`.pptx`) from a JSON content spec, using a bundled brand template (navy/Exo 2 KPI style) and a build + preview-render + visual-check loop. Can also update/regenerate an existing deck. |
 | `asac-paper-format` | `kpi-skills:asac-paper-format` | Formats and checks a paper for the KPI journal «Адаптивні системи автоматичного управління» ([asac.kpi.ua](https://asac.kpi.ua)): Markdown+YAML source → journal-compliant `.docx` (A4, TNR 13, 1.3, native numbered equations, DSTU 8302:2015 references, UA+EN structured abstracts and author info on separate end pages), plus a rule-by-rule compliance report. Can import an existing `.docx`/`.tex` draft. |
+| `vottp-paper-format` | `kpi-skills:vottp-paper-format` | Formats and checks manuscripts for «Вимірювальна та обчислювальна техніка в технологічних процесах» ([vottp.khmnu.edu.ua](https://vottp.khmnu.edu.ua)): sourced requirements, three recent paper reviews, DOCX layout with content preservation, and a manual formatting/content compliance report. Records conflicting journal instructions explicitly. |
 
 ### `phd-report-presentation`
 
@@ -59,6 +60,30 @@ This repository is both a Claude Code **plugin** and its own **marketplace** —
   slide master, all layouts, and the theme intact — see
   `skills/phd-report-presentation/scripts/README.md` for details and the
   re-verification steps to run afterward.
+
+### `vottp-paper-format`
+
+- **Triggers:** "format my paper for VOTTP", "оформи статтю для ВОТТП", or preparation,
+  checks and revisions for `vottp.khmnu.edu.ua`.
+- **Requirements:** Python 3.10+ and `uv` (the helper resolves `lxml`); Word or
+  LibreOffice plus a PDF renderer for visual verification and actual page counts.
+- **Workflow:** read `skills/vottp-paper-format/references/requirements.md`, inventory
+  a DOCX, classify paragraph roles, format a copy, render every page, then complete
+  the manual content/policy report. The automated report covers layout only.
+- **Quick start:**
+  ```bash
+  S=skills/vottp-paper-format
+  uv run "$S/scripts/vottp_docx.py" inspect draft.docx --out work/roles.json
+  # Review work/roles.json and assign semantic paragraph roles.
+  uv run "$S/scripts/vottp_docx.py" format draft.docx --roles work/roles.json --out work/paper.docx
+  uv run "$S/scripts/vottp_docx.py" check work/paper.docx --roles work/roles.json --original draft.docx --out work/layout-report.json
+  ```
+- **Sources:** requirements checked 2026-10-25; three papers from №3 (2026), published
+  2026-09-10. The detailed guide's TNR 10 / spacing 1.3 is the default; the optional
+  `--profile published` approximates observed production typography. Author-count,
+  abstract-length and other conflicting instructions remain visible in the report.
+- **Validation:** `uv run tests/vottp-paper-format/test_vottp.py` checks both profiles,
+  preservation of equations/media/links/tables, and failure handling.
 
 ### `asac-paper-format`
 
@@ -112,11 +137,15 @@ kpi_skills/
 │   │   ├── scripts/         # build_deck.py, render_preview.py, make_template.py
 │   │   ├── references/      # spec-schema.md, style-guide.md, report-structure.md
 │   │   └── assets/          # template.pptx, example-spec.json, fonts/
-│   └── asac-paper-format/
+│   ├── asac-paper-format/
+│   │   ├── SKILL.md
+│   │   ├── scripts/         # build_paper.py, check_paper.py, import_source.py, render_preview.py
+│   │   ├── references/      # requirements.md, published-papers-review.md, reference-style.md, ...
+│   │   └── assets/          # official journal templates, worked example
+│   └── vottp-paper-format/
 │       ├── SKILL.md
-│       ├── scripts/         # build_paper.py, check_paper.py, import_source.py, render_preview.py
-│       ├── references/      # requirements.md, published-papers-review.md, reference-style.md, ...
-│       └── assets/          # official journal templates, worked example
+│       ├── scripts/         # vottp_docx.py: inspect, format and layout/preservation checks
+│       └── references/      # requirements, three-paper review, formatting workflow
 ├── .gitignore
 └── README.md
 ```
@@ -124,6 +153,14 @@ kpi_skills/
 `.claude-plugin/` contains **only** the two manifest files — every other component (skills, commands, agents, hooks, etc.) lives at the repository root per the Claude Code plugin spec.
 
 ## Tests
+
+`tests/vottp-paper-format/test_vottp.py` checks both VOTTP layout profiles and
+preservation of native equations, media, tables, links, symbols and emphasis,
+including stale role maps and deliberately damaged output:
+
+```bash
+uv run tests/vottp-paper-format/test_vottp.py
+```
 
 `tests/asac-paper-format/test_asac.py` is the same kind of plain-assert suite for the
 `asac-paper-format` skill (build layout against the journal rules, a Ukrainian

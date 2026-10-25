@@ -1,0 +1,4 @@
+interface:
+  display_name: "VOTTP Paper Format"
+  short_description: "Format and check manuscripts for the VOTTP journal"
+  default_prompt: "Use $vottp-paper-format to format my manuscript for VOTTP and report unmet journal requirements."
