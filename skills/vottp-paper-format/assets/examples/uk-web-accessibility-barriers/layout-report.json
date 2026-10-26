@@ -1,0 +1,22 @@
+{
+  "profile": "guide",
+  "findings": [
+    {
+      "status": "NOT VERIFIED",
+      "rule": "F04",
+      "location": "document",
+      "message": "Actual page count requires rendering"
+    }
+  ],
+  "abstract_characters_including_spaces": {
+    "uk": 744,
+    "en": 2204
+  },
+  "errors": 0,
+  "scope": "Automated layout subset only; manual content, policy and visual review required",
+  "preservation": {
+    "other_package_parts_unchanged": true,
+    "content_and_structure_preserved": true,
+    "native_equations_preserved": true
+  }
+}

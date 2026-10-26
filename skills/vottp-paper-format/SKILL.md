@@ -16,6 +16,16 @@ Read [published-papers-review.md](references/published-papers-review.md) for thr
 recent examples and [formatting-workflow.md](references/formatting-workflow.md)
 for the helper's role map, layout choices and limitations.
 
+Two worked examples (real CC BY 2026 papers rebuilt as plain author drafts, with
+`roles.json`, formatted `paper.docx`, `layout-report.json` and a README of commands and
+paper-specific findings) are in `assets/examples/`. Read the one that matches the
+manuscript before writing a role map:
+`en-rucklidge-euler-matlab/` for English text with displayed equations, many tables,
+multi-panel figures and Ukrainian front matter after the English; `uk-web-accessibility-barriers/`
+for Ukrainian text with three authors at two institutions, figures only, and both
+«Література» and References lists. Use them as patterns for roles and report wording,
+not as proof that a given length, citation practice or abstract balance will be accepted.
+
 ## Intake and content review
 
 1. Work in a submission directory outside the skill. Retain the original input.

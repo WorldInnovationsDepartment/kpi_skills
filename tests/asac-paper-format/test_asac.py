@@ -405,6 +405,41 @@ else:
               and "pages" not in codes(r.stdout, "ERROR"), m_.group(0) if m_ else "")
 
 # =====================================================================
+print("== 10. real published examples")
+EXAMPLES_DIR = SKILL_DIR / "assets" / "examples"
+# (dir, language, figures, tables, equations). The journal does not publish
+# e-mails, a corresponding author or the other-language fields, so check_paper.py
+# must report exactly these ERROR families and nothing else.
+REAL = [
+    ("en-software-cost-fuzzy", "en", 1, 0, 12),
+    ("uk-google-classroom-export", "uk", 4, 1, 0),
+]
+UNPUBLISHED_ERRORS = {"meta.todo", "authors.email", "authors.corresponding", "keywords.uk.count", "keywords.en.count"}
+for slug, lang, n_fig, n_tab, n_eq in REAL:
+    d = EXAMPLES_DIR / slug
+    src_path = d / "paper.md"
+    check(f"{slug}: paper.md and README.md exist", src_path.is_file() and (d / "README.md").is_file())
+    if not src_path.is_file():
+        continue
+    meta_r, _ = split_source(src_path)
+    check(f"{slug}: language is {lang}", meta_r.get("language") == lang)
+    check(f"{slug}: figures are small (<300 KB)", all(f.stat().st_size < 300_000
+          for f in d.iterdir() if f.suffix in (".png", ".jpg")))
+    out_r = WORK / f"{slug}.docx"
+    r = run(BUILD, src_path, "--out", out_r, "--verbose")
+    check(f"{slug}: builds without ERROR", r.returncode == 0 and out_r.is_file() and "error:" not in r.stderr,
+          r.stderr[-600:])
+    if not out_r.is_file():
+        continue
+    check(f"{slug}: .docx is well-formed OOXML", not ooxml_problems(out_r), str(ooxml_problems(out_r)))
+    check(f"{slug}: {n_fig} figure(s), {n_tab} table(s), {n_eq} equation(s)",
+          f"figures={n_fig}, tables={n_tab}, equations={n_eq}" in r.stderr + r.stdout, (r.stderr + r.stdout)[-300:])
+    r = run(CHECK, src_path, "--docx", out_r, "--no-reminders")
+    errs = codes(r.stdout, "ERROR")
+    check(f"{slug}: checker runs; only unpublished-field ERRORs", "SUMMARY:" in r.stdout
+          and errs <= UNPUBLISHED_ERRORS, f"{sorted(errs - UNPUBLISHED_ERRORS)} {r.stdout[-300:]}")
+
+# =====================================================================
 n_fail = sum(1 for _, ok, _ in RESULTS if not ok)
 n_pass = len(RESULTS) - n_fail
 print(f"SUMMARY: {n_pass}/{len(RESULTS)} passed, {n_fail} failed, {len(SKIPPED)} skipped")
