@@ -187,6 +187,47 @@ def exercise(work):
     print("PASS: stale/invalid maps, in-place writes, margin defects, missing math, floating images, revisions and media changes detected")
 
 
+def canonical_document_xml(path):
+    """word/document.xml of a .docx in C14N form (independent of zip metadata and serialisation)."""
+    import zipfile
+    from lxml import etree
+    with zipfile.ZipFile(path) as z:
+        root = etree.fromstring(z.read("word/document.xml"))
+    return etree.tostring(root, method="c14n")
+
+
+def exercise_examples(work):
+    """Shipped worked examples: documented commands run clean and reproduce the shipped outputs (canonical XML)."""
+    base = SCRIPT.parents[1] / "assets" / "examples"
+    examples = sorted(p for p in base.iterdir() if p.is_dir())
+    assert len(examples) >= 2 and {p.name[:3] for p in examples} >= {"en-", "uk-"}, examples
+    for ex in examples:
+        for name in ("draft.docx", "roles.json", "paper.docx", "layout-report.json", "README.md"):
+            assert (ex / name).is_file(), (ex.name, name)
+        readme = (ex / "README.md").read_text(encoding="utf-8")
+        assert "CC BY 4.0" in readme and "doi.org/10.31891/" in readme, ex.name
+        out = work / ex.name
+        out.mkdir(parents=True, exist_ok=True)
+        run("check", ex / "paper.docx", "--roles", ex / "roles.json", "--original", ex / "draft.docx", "--out", out / "check.json")
+        shipped = json.loads((ex / "layout-report.json").read_text())
+        assert shipped["errors"] == 0 and all(shipped["preservation"].values()), ex.name
+        assert json.loads((out / "check.json").read_text()) == shipped, ex.name
+        run("format", ex / "draft.docx", "--roles", ex / "roles.json", "--out", out / "paper.docx")
+        # Byte equality is brittle (zip timestamps, lxml serialisation): compare the
+        # canonicalised word/document.xml, then require the fresh output to check clean.
+        assert canonical_document_xml(out / "paper.docx") == canonical_document_xml(ex / "paper.docx"), ex.name
+        run("check", out / "paper.docx", "--roles", ex / "roles.json", "--original", ex / "draft.docx", "--out", out / "check-fresh.json")
+        assert json.loads((out / "check-fresh.json").read_text())["errors"] == 0, ex.name
+        run("inspect", ex / "draft.docx", "--out", out / "inspect.json")
+        fresh = json.loads((out / "inspect.json").read_text())
+        roles = json.loads((ex / "roles.json").read_text())
+        assert fresh["source_sha256"] == roles["source_sha256"]
+        assert [(p["index"], p["text"]) for p in fresh["paragraphs"]] == [(p["index"], p["text"]) for p in roles["paragraphs"]]
+        assert all(p["role"] != "body" or not p["in_table"] for p in roles["paragraphs"])
+        Document(ex / "paper.docx")
+    print("PASS: shipped examples check clean, reproduce the shipped document.xml and keep their role inventories")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--keep", type=Path)
@@ -194,6 +235,8 @@ if __name__ == "__main__":
     if args.keep:
         args.keep.mkdir(parents=True, exist_ok=True)
         exercise(args.keep)
+        exercise_examples(args.keep)
     else:
         with tempfile.TemporaryDirectory(prefix="vottp-test-") as directory:
             exercise(Path(directory))
+            exercise_examples(Path(directory))

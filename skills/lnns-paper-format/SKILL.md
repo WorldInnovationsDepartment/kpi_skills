@@ -29,7 +29,10 @@ References, loaded on demand:
 3. `references/reference-style.md`: the splncs04 reference style, with templates and conversions.
 4. `references/published-papers-review.md`: three recent LNNS papers, what is enforced in
    practice and what is not.
-5. `assets/example/paper.md`: a complete worked source to copy.
+5. `assets/example/paper.md`: a complete worked source to copy (fictional content, every feature).
+   `assets/examples/en-ils-simulator-review/`: a real open-access LNNS chapter (CC BY 4.0, llncs
+   layout, 11 pages) converted to `paper.md`, with its figure and a README on source, licence and
+   known checker findings.
 6. `assets/latex/`: llncs.cls and splncs04.bst (CTAN, CC BY 4.0).
 
 Work in a directory of the user's choice (e.g. `./lnns-submission/`), never inside this skill

@@ -359,6 +359,23 @@ if shutil.which("soffice") or Path("/Applications/LibreOffice.app/Contents/MacOS
 else:
     skip("render + pdf checks", "LibreOffice not installed")
 
+# ---------------------------------------------------------------- real published example
+
+REAL = SKILL_DIR / "assets" / "examples" / "en-ils-simulator-review"
+d = WORK / "real"
+shutil.copytree(REAL, d)
+p = run(BUILD, d / "paper.md", "--docx", d / "paper.docx", "--latex", d / "latex", "--verbose")
+check("real example builds (docx + latex)", p.returncode == 0 and (d / "latex" / "paper.tex").is_file(), p.stderr[-800:])
+check("real example: 6 sections, 1 figure, 1 table, 24 references",
+      "sections=6, figures=1, tables=1, equations=0, references=24" in p.stderr, p.stderr[-300:])
+p = run(CHECK, d / "paper.md", "--docx", d / "paper.docx", "--year", "2026")
+# The chapter prints no Disclosure of Interests and cites [8] before [7]; these three findings are
+# documented in the example's README and are the only ERRORs allowed.
+real_errors = level_codes(p.stdout, "ERROR")
+check("real example: no ERRORs beyond the documented published-chapter findings",
+      real_errors <= {"credits.disclosure", "docx.disclosure", "cite.order"}, p.stdout)
+check("real example: no placeholder or TODO findings", not {"authors.placeholder", "todo"} & codes(p.stdout), p.stdout)
+
 # ---------------------------------------------------------------- summary
 
 failed = [r for r in RESULTS if not r[1]]

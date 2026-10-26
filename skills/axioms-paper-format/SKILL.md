@@ -36,7 +36,13 @@ References, loaded on demand:
       `Definitions/` with `mdpi.cls` v6.5d) and the Axioms Word template `.dot`.
    2. `assets/example/`: a complete Axioms manuscript (`paper.tex`, `references.bib`,
       `fig1.png`). It passes the checker with 0 errors and 0 warnings; copy patterns from it.
-   3. `assets/cover-letter.md`: the cover letter with the two required sentences.
+   3. `assets/examples/en-discrete-optimization/`: a real published Axioms paper (CC BY 4.0,
+      *Axioms* 2026, 15(3), 190), with its arXiv `draft/` as input and the MDPI-class
+      `paper.tex` + `references.bib` as output. It shows a real draft-to-Axioms port: lemmas,
+      proofs, figures, a table, `thebibliography` to `.bib`. Its `README.md` lists the gaps
+      against the journal version (the draft lacks the corresponding author and the back-matter
+      statements; they stay `TODO`, so the checker reports 6 placeholder errors).
+   4. `assets/cover-letter.md`: the cover letter with the two required sentences.
 
 Work in a folder of the user's choice (e.g. `./axioms-submission/`), never inside this skill
 directory.
