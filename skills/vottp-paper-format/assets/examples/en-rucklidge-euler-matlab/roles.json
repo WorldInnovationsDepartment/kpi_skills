@@ -1,0 +1,2807 @@
+{
+  "source_sha256": "eb41020900bf458218779aa002ee59c2419f1869e00d6cd6dfcf2d09caae1a16",
+  "paragraphs": [
+    {
+      "index": 0,
+      "text": "UDC 004.272.2:519.6:517.925",
+      "in_table": false,
+      "role": "udc"
+    },
+    {
+      "index": 1,
+      "text": "RAZOVYI Oleksandr",
+      "in_table": false,
+      "role": "author"
+    },
+    {
+      "index": 2,
+      "text": "Khmelnytskyi National University",
+      "in_table": false,
+      "role": "affiliation"
+    },
+    {
+      "index": 3,
+      "text": "https://orcid.org/0009-0002-4708-7820",
+      "in_table": false,
+      "role": "contact"
+    },
+    {
+      "index": 4,
+      "text": "e-mail: razovyioo@khmnu.edu.ua",
+      "in_table": false,
+      "role": "contact"
+    },
+    {
+      "index": 5,
+      "text": "GOLEVYCH Oleg",
+      "in_table": false,
+      "role": "author"
+    },
+    {
+      "index": 6,
+      "text": "Khmelnytskyi National University",
+      "in_table": false,
+      "role": "affiliation"
+    },
+    {
+      "index": 7,
+      "text": "https://orcid.org/0009-0001-2987-6722",
+      "in_table": false,
+      "role": "contact"
+    },
+    {
+      "index": 8,
+      "text": "e-mail: digasgo@gmail.com",
+      "in_table": false,
+      "role": "contact"
+    },
+    {
+      "index": 9,
+      "text": "PERFORMANCE COMPARISON OF EXPLICIT EULER IMPLEMENTATIONS FOR AN ENSEMBLE OF RUCKLIDGE SYSTEM TRAJECTORIES IN MATLAB",
+      "in_table": false,
+      "role": "title"
+    },
+    {
+      "index": 10,
+      "text": "Large-scale integration of independent trajectories of dynamic system is limited not only by the cost of the recurrence step but also by the organization of parallel work, storage of intermediate states, and transfers between memory levels. This study compares explicit Euler implementations for an ensemble of Rucklidge-system trajectories under three output scenarios. A 200 × 200 parameter grid was evaluated with scalar and vectorized MATLAB code on a central processing unit (CPU), ThreadPool/parfor, gpuArray operations on a graphics processing unit (GPU), specialized Compute Unified Device Architecture (CUDA) kernels, and C++ MATLAB executable (MEX) code with Open Multi-Processing (OpenMP) and single instruction, multiple data (SIMD). Each of the 40,000 trajectories contained 307,674 Euler updates. Most configurations were measured in 15 complete repeats and summarized by the median and interquartile range (IQR). With only the final state retained in double precision, two-level CPU parallelism reduced the median time from 45.232 s (IQR 0.744 s) to 2.076 s (IQR 0.163 s), a factor of 21.78. A CUDA kernel that executed 5,000 sequential steps per launch required 2.119 s (IQR 0.0014 s) in double precision and 0.291 s (IQR 0.0014 s) in single precision. For full-state storage, CUDA strict single generated the time series in video memory in 0.598 s (IQR 0.00035 s), but sequential transfer of all blocks to host memory increased the estimated pipeline time to 25.35 s. The 18.873 s CPU parfor full-history result is a critical-path estimate based on the maximum worker time, not host-observed end-to-end runtime. The results show that implementation choice depends on the parallel axis, spatial and temporal block sizes, memory locality, arithmetic precision, and the location of downstream analysis.",
+      "in_table": false,
+      "role": "abstract-en"
+    },
+    {
+      "index": 11,
+      "text": "Keywords: explicit Euler method; Rucklidge system; MATLAB; vectorization; parfor; CUDA; OpenMP; MEX; chaotic system; batch computation; memory bandwidth.",
+      "in_table": false,
+      "role": "keywords-en"
+    },
+    {
+      "index": 12,
+      "text": "РАЗОВИЙ Олександр, ГОЛЕВИЧ Олег",
+      "in_table": false,
+      "role": "author"
+    },
+    {
+      "index": 13,
+      "text": "Хмельницький національний університет",
+      "in_table": false,
+      "role": "affiliation"
+    },
+    {
+      "index": 14,
+      "text": "ПОРІВНЯННЯ ШВИДКОДІЇ РЕАЛІЗАЦІЙ ЯВНОГО МЕТОДУ ЕЙЛЕРА ДЛЯ АНСАМБЛЮ ТРАЄКТОРІЙ СИСТЕМИ РАКЛІДЖА В MATLAB",
+      "in_table": false,
+      "role": "title"
+    },
+    {
+      "index": 15,
+      "text": "Швидкодія обчислення значень великих ансамблів незалежних траєкторій динамічних систем обмежується не лише швидкістю власне обчислень, але й організацією паралельної роботи, зберіганням проміжних станів системи і передаванням даних між рівнями пам'яті. У попередніх дослідженнях швидкодії зазвичай використовують різні моделі, розв'язувачі або апаратні конфігурації, тому ці чинники неможливо відокремити за незмінної рекурентної формули. У роботі визначено, яка реалізація явного методу Ейлера забезпечує найменший час виконання для ансамблю траєкторій системи Ракліджа у трьох сценаріях використання даних. На одній сітці параметрів 200 × 200 досліджено скалярні та векторизовані реалізації MATLAB на центральному процесорі (CPU), ThreadPool/parfor, операції gpuArray на графічному процесорі (GPU), спеціалізовані ядра CUDA та реалізації C++ MEX з OpenMP і SIMD. Повний експеримент охоплював 40 000 незалежних траєкторій, 307 674 кроки Ейлера для кожної траєкторії та 12,307 млрд оновлень трьох компонентів стану. Більшість конфігурацій виміряно у 15 повних повторах, а результати узагальнено за медіаною та міжквартильним розмахом (IQR). У сценарії зі збереженням лише кінцевого стану дворівнева CPU-реалізація з вісьмома workers і блоками по 1 750 траєкторій скоротила медіанний час обчислення з подвійною точністю з 45,232 с (IQR 0,744 с) до 2,076 с (IQR 0,163 с), тобто у 21,78 раза. Ядро CUDA, що виконувало 5 000 послідовних кроків Ейлера за один запуск, потребувало 2,119 с (IQR 0,0014 с) з подвійною точністю та 0,291 с (IQR 0,0014 с) з одинарною точністю. У сценарії збереження повної історії CUDA strict single записувала часові ряди у відеопам'ять (VRAM) за 0,598 с (IQR 0,00035 с), однак послідовне передавання всіх блоків до оперативної пам'яті (RAM) збільшувало оцінений час конвеєрної обробки до 25,35 с. Наведене значення 18,873 с для CPU classic+parfor зі збереженням повної історії є оцінкою критичного шляху за максимальним часом worker, а не повним часом розрахунку. Варіанти арифметики CUDA порівнювали за контрольними сумами кінцевих станів, які є діагностичними показниками, а не доказом еквівалентності окремих траєкторій.",
+      "in_table": false,
+      "role": "abstract-uk"
+    },
+    {
+      "index": 16,
+      "text": "Ключові слова: явний метод Ейлера; система Ракліджа; MATLAB; векторизація; parfor; CUDA; OpenMP; MEX; хаотична система; пакетні обчислення; пропускна здатність пам'яті.",
+      "in_table": false,
+      "role": "keywords-uk"
+    },
+    {
+      "index": 17,
+      "text": "PROBLEM STATEMENT",
+      "in_table": false,
+      "role": "heading"
+    },
+    {
+      "index": 18,
+      "text": "Building two- or three-parameter bifurcation diagrams means integrating the same dynamical system for many independent parameter combinations. Chaotic systems make this computation heavy because transients are long and the final regime still has to be classified. Rucklidge introduced the model as a description of double convection [1], and later work examined its bifurcations, routes to chaos, and analytical properties [2, 3]. In this work the model is used as a fixed test problem for comparing MATLAB implementations.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 19,
+      "text": "An earlier comparison of 84 continuous-time chaos generators used two-parameter maps together with correlation and spectral criteria, and identified the Rucklidge generator as a strong candidate for broadband telecommunication ensembles [4]. The related dissertation developed parameter-vector searches and parallel tools for identifying chaotic regimes [5]. That work explains why faster large parameter sweeps are useful; the present article focuses on the cost of generating the trajectories.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 20,
+      "text": "Steps within a single trajectory form a recurrence, so they must be evaluated in order. Trajectories for different K and L pairs are independent and can run in parallel. Performance therefore depends on how trajectories are grouped, how many CPU or GPU resources are used, whether intermediate states are stored, and how much data must be moved.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 21,
+      "text": "ANALYSIS OF RECENT RESEARCH AND PUBLICATIONS",
+      "in_table": false,
+      "role": "heading"
+    },
+    {
+      "index": 22,
+      "text": "Previous studies parallelized independent parameter-grid points to build two-parameter bifurcation diagrams [6, 7]. Other work classified the resulting regimes with the 0-1 test, entropy measures, or Lyapunov exponents [8-10], and supervised learning has been used to reconstruct diagrams from time series [11]. Coarse-grained CPU parallelism was also evaluated for a fractional Selkov oscillator [12]. These studies treat trajectory generation and regime classification as separate stages, so their costs should also be reported separately.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 23,
+      "text": "CUDA studies have shown that bifurcation analysis maps naturally to many independent trajectories [13, 14]. General GPU solvers for ordinary differential-equation ensembles use a similar model, assigning one trajectory or small system to each thread [15]. The Rucklidge right-hand side, however, contains little arithmetic per step. When MATLAB launches work for every step, kernel-launch overhead and repeated global-memory access can dominate.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 24,
+      "text": "MATLAB documentation describes vectorization, ThreadPool/parfor, gpuArray, synchronized GPU timing, and the reduction of host-device transfers [16-19]. The cited application studies [6-15] and documentation do not compare all methods on the same recurrence, parameter grid, and initial state while separating three outputs: final state only, full history in local memory, and transfer from VRAM to RAM. The present benchmark fills that gap.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 25,
+      "text": "AIM AND OBJECTIVES",
+      "in_table": false,
+      "role": "heading"
+    },
+    {
+      "index": 26,
+      "text": "The performance of implementations of the same explicit Euler recurrence was evaluated to determine which one gives the lowest median time for an ensemble of independent trajectories under three output scenarios. The scheme, integration step, initial conditions, and parameter grid were kept fixed. MATLAB, GPU/CUDA, and MEX implementations were compared; the trajectory-block size B and the number q of steps executed per CUDA launch were varied; full-history storage in RAM or VRAM and transfer to MATLAB arrays were measured; and repeat variability and diagnostic numerical agreement were reported.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 27,
+      "text": "The comparison has three parts. First: CPU, GPU, and MEX implementations run the same recurrence on the same grid. Second: final-state computation, full-history storage, and GPU-to-RAM transfer are timed separately. Third: the experiments isolate the effects of B, q, memory type, and CUDA arithmetic mode.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 28,
+      "text": "MATHEMATICAL MODEL AND COMPUTATIONAL EXPERIMENT",
+      "in_table": false,
+      "role": "heading"
+    },
+    {
+      "index": 29,
+      "text": "The Rucklidge system was used as the test problem. Its state is defined by x, y, and z, dimensionless time by τ, and its dynamics by the dimensionless parameters K and L:",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 30,
+      "text": "dx/dτ = −K·x + L·y − y·zdy/dτ = xdz/dτ = −z + y2(1)",
+      "in_table": false,
+      "role": "equation"
+    },
+    {
+      "index": 31,
+      "text": "System (1) was integrated with the explicit Euler method. For every K and L pair, the state at step n + 1 was computed only from the state at the preceding step n:",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 32,
+      "text": "xn+1 = xn + Δt·(−K·xn + L·yn − yn·zn)yn+1 = yn + Δt·xnzn+1 = zn + Δt·(−zn + yn2)(2)",
+      "in_table": false,
+      "role": "equation"
+    },
+    {
+      "index": 33,
+      "text": "Each new state depends on the previous state, so the n = 1,…,N loop remains sequential within one trajectory. The M trajectories for different K and L pairs are independent. Batch implementations therefore store x, y, z, K, and L as vectors and apply Eq. (2) elementwise to each block. Only the organization of independent trajectories changes; the Euler scheme does not [16].",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 34,
+      "text": "Parameters K and L were varied uniformly over 200 values in each of the closed intervals stated below. Index pair (i, j) was mapped to trajectory m = (i − 1)·200 + j, yielding M = 40,000 trajectories. Each trajectory contained N = 307,674 recurrent updates of the three variables. The dimensionless integration step was Δt = 0.00487. One physical sample interval was Δt·R·C with R = 200 kΩ and C = 1 nF; hence N = round(0.3/(Δt·R·C)) corresponds to a 0.3 s signal of physical generator.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 35,
+      "text": "The three-component time series of one trajectory occupies about 7.04 MiB in double precision and 3.52 MiB in single precision. A contiguous 3 × 40,000 × 307,674 double-precision array would require 275.08 GiB. Time series were therefore processed in blocks, with one preallocated buffer reused across blocks and repeats.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 36,
+      "text": "The following terms are used: Central Processing Unit (CPU), Graphics Processing Unit (GPU), Random Access Memory (RAM), Video Random Access Memory (VRAM), MATLAB Executable (MEX), Open Multi-Processing (OpenMP), and MATLAB worker. Double and single denote 64-bit and 32-bit floating-point formats, respectively. Experimental parameters and complete software and hardware details are given in Table 1.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 37,
+      "text": "Table 1",
+      "in_table": false,
+      "role": "table-label"
+    },
+    {
+      "index": 38,
+      "text": "Parameters of the complete computational experiment",
+      "in_table": false,
+      "role": "table-title"
+    },
+    {
+      "index": 39,
+      "text": "Characteristic",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 40,
+      "text": "Value",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 41,
+      "text": "Parameter grid",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 42,
+      "text": "200 × 200; M = 40,000 trajectories",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 43,
+      "text": "Trajectory length",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 44,
+      "text": "N = 307,674 states of x, y, z",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 45,
+      "text": "Step and physical duration",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 46,
+      "text": "Δt = 0.0048752849; R = 200 kΩ; C = 1 nF; Tsignal = 0.3 s",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 47,
+      "text": "Parameter ranges",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 48,
+      "text": "K = 1.246883…3.311203; L = 2.595717…7.393442",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 49,
+      "text": "Initial state",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 50,
+      "text": "Deterministic pseudorandom x₀, y₀, z₀ ∈ [0, 5); rng(1)",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 51,
+      "text": "Software and OS",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 52,
+      "text": "MATLAB R2025b (25.2), Parallel Computing Toolbox 25.2, ThreadPool; Windows 10 Pro 22H2, build 19045.6456, 64-bit",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 53,
+      "text": "CPU",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 54,
+      "text": "AMD Ryzen 7 5800H; 8 physical cores, 16 logical processors; 8 ThreadPool workers",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 55,
+      "text": "GPU",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 56,
+      "text": "NVIDIA GeForce RTX 3060 Laptop GPU; 6 GB VRAM; compute capability 8.6; driver 610.47; CUDA Toolkit 12.2 reported by MATLAB",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 57,
+      "text": "Memory",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 58,
+      "text": "64 GB installed; 59.86 GiB physical; 38.86 GiB history-buffer budget",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 59,
+      "text": "Compilers and flags",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 60,
+      "text": "Microsoft Visual C++ 2022 (17.0); CPU MEX: -R2018a, /O2, /openmp:experimental; CUDA MEX: -R2018a, -O, NVCC flag -allow-unsupported-compiler",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 61,
+      "text": "To relate memory limits to the actual computational granularity, Table 2 lists the partition of the parameter grid in each scenario.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 62,
+      "text": "Table 2",
+      "in_table": false,
+      "role": "table-label"
+    },
+    {
+      "index": 63,
+      "text": "Partition of the 200 × 200 parameter grid into trajectory blocks",
+      "in_table": false,
+      "role": "table-title"
+    },
+    {
+      "index": 64,
+      "text": "Scenario",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 65,
+      "text": "B",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 66,
+      "text": "Blocks",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 67,
+      "text": "Last B",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 68,
+      "text": "Concurrent work",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 69,
+      "text": "Memory",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 70,
+      "text": "CPU vector+parfor, final state",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 71,
+      "text": "1,750",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 72,
+      "text": "23",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 73,
+      "text": "1,500",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 74,
+      "text": "up to 8 tasks",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 75,
+      "text": "RAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 76,
+      "text": "CPU full history, 1 worker",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 77,
+      "text": "5,650",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 78,
+      "text": "8",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 79,
+      "text": "450",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 80,
+      "text": "1",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 81,
+      "text": "RAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 82,
+      "text": "CPU full history, 8 workers",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 83,
+      "text": "706",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 84,
+      "text": "57",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 85,
+      "text": "464",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 86,
+      "text": "up to 8 tasks",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 87,
+      "text": "shared RAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 88,
+      "text": "GPU full history, double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 89,
+      "text": "546",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 90,
+      "text": "74",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 91,
+      "text": "142",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 92,
+      "text": "1 host block/launch",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 93,
+      "text": "VRAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 94,
+      "text": "GPU full history, single",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 95,
+      "text": "1,092",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 96,
+      "text": "37",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 97,
+      "text": "688",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 98,
+      "text": "1 host block/launch",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 99,
+      "text": "VRAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 100,
+      "text": "GPU strict single, optimum",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 101,
+      "text": "1,024",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 102,
+      "text": "40",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 103,
+      "text": "64",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 104,
+      "text": "1 host block/launch",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 105,
+      "text": "VRAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 106,
+      "text": "MEX full history",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 107,
+      "text": "2,048",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 108,
+      "text": "20",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 109,
+      "text": "1,088",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 110,
+      "text": "OpenMP",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 111,
+      "text": "RAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 112,
+      "text": "The complete experiment comprised 12.30696 billion recurrent updates of a three-component state. Every table, figure, and conclusion in this article uses complete N = 307,674 runs; shorter search and smoke runs were used only to select candidate configurations and are excluded from the reported results.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 113,
+      "text": "MEASUREMENT PROTOCOL AND REPRODUCIBILITY",
+      "in_table": false,
+      "role": "heading"
+    },
+    {
+      "index": 114,
+      "text": "The implementations differ in their parallel unit, sequential dimension, state location, and output scenario (Table 3).",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 115,
+      "text": "Table 3",
+      "in_table": false,
+      "role": "table-label"
+    },
+    {
+      "index": 116,
+      "text": "Implementations compared in the computational experiment",
+      "in_table": false,
+      "role": "table-title"
+    },
+    {
+      "index": 117,
+      "text": "Implementation",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 118,
+      "text": "Parallel unit and sequential dimension",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 119,
+      "text": "State location",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 120,
+      "text": "Measured output scenario",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 121,
+      "text": "MATLAB scalar",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 122,
+      "text": "One trajectory at a time; sequential time loop",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 123,
+      "text": "Current state or full history in RAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 124,
+      "text": "Final state; full history",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 125,
+      "text": "MATLAB scalar + parfor",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 126,
+      "text": "Independent trajectories distributed across workers; time loop remains sequential",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 127,
+      "text": "Worker-local RAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 128,
+      "text": "Final state; full-history critical-path estimate",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 129,
+      "text": "MATLAB vector direct",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 130,
+      "text": "B trajectories updated elementwise; sequential time loop",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 131,
+      "text": "Vector state or history in RAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 132,
+      "text": "Final state; full history",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 133,
+      "text": "MATLAB vector + parfor",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 134,
+      "text": "Blocks B distributed across workers; vectorized update within each worker",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 135,
+      "text": "Worker-local RAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 136,
+      "text": "Final state; full-history critical-path estimate",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 137,
+      "text": "GPU direct (gpuArray)",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 138,
+      "text": "Several MATLAB-issued GPU operations per Euler step",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 139,
+      "text": "Current vectors in VRAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 140,
+      "text": "Final state",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 141,
+      "text": "GPU arrayfun",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 142,
+      "text": "One compiled GPU kernel per Euler step; N launches",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 143,
+      "text": "Current vectors in VRAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 144,
+      "text": "Final state",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 145,
+      "text": "GPU q-step kernel",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 146,
+      "text": "One GPU thread performs q sequential steps per launch",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 147,
+      "text": "Current vectors in VRAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 148,
+      "text": "Final state",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 149,
+      "text": "CUDA history kernel",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 150,
+      "text": "One thread per trajectory integrates and stores all N states",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 151,
+      "text": "Full history in VRAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 152,
+      "text": "Full history; strict and FMA",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 153,
+      "text": "MEX C++",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 154,
+      "text": "Serial, OpenMP, and SIMD loop organizations",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 155,
+      "text": "Current state or full history in RAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 156,
+      "text": "Final state; full history",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 157,
+      "text": "Three scenarios were calculated and measured (Fig. 1):",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 158,
+      "text": "In the final-state-only scenario, only the final x, y, z, and a checksum were retained.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 159,
+      "text": "In the full-history scenario, all N values of x, y, and z were written to a preallocated RAM buffer for CPU/MEX or a VRAM buffer for CUDA; the buffer was allocated once and reused across blocks and repeats.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 160,
+      "text": "In the third scenario, gather created an ordinary MATLAB array and copied each complete history block from VRAM. Disk input/output was not timed.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 161,
+      "text": "",
+      "in_table": false,
+      "role": "figure"
+    },
+    {
+      "index": 162,
+      "text": "Fig. 1. Distribution of complete measured repeats for selected implementations",
+      "in_table": false,
+      "role": "figure-caption"
+    },
+    {
+      "index": 163,
+      "text": "In Fig. 1 circles use the final-state-only scenario and the left logarithmic y-axis; squares use full-history storage and the right logarithmic y-axis. Individual values and the median are shown for 15-run series. The two slow MEX full-history configurations show both runs and their exploratory mean. CPU parfor full-history squares are maximum-worker critical-path estimates rather than host end-to-end times. Warm-up is excluded.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 164,
+      "text": "Throughput Q was defined as one trajectory update per time step, Q = MN/T, where T is the measured time. The speedup relative to scalar MATLAB was Kₜ = Tscalar/T. Parallel efficiency was E = (T₁/Tp)/p, where T₁ and Tp are timings of the same algorithm with one and p workers. This definition keeps algorithmic vectorization gains separate from worker-level parallel efficiency.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 165,
+      "text": "For each algorithmic family, Fig. 1 shows the most effective tested configuration for each scenario. Parameters within a pair may therefore differ: vector+parfor uses B = 1,750 without history but B = 706 per worker when writing to RAM; the GPU final-state-only method performs q = 5,000 sequential steps per launch, whereas the full-history method uses a specialized CUDA kernel that computes and immediately stores every state. The figure compares practical output scenarios, not an isolated assignment operation.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 166,
+      "text": "A discarded warm-up run preceded every final-state-only series, and the order of configurations was randomized within each repeat. Full-history method families were executed in a fixed order without an additional discarded repeat. Most configurations used 15 complete repeats and are summarized by the median and IQR. The two slow MEX full-history configurations used two complete runs: OpenMP scalar took 229.857 and 229.998 s, and serial scalar took 461.613 and 462.402 s. Their means are reported only as exploratory values. The parpool(\"Threads\", 8) pool was selected because thread-based workers share memory [17]. Reusable-buffer allocation, pool startup, and MEX compilation were excluded from timing. The GPU was synchronized before the timer stopped [18]. For CPU full-history parfor, timers were located inside each worker; the reported value is the median of the maximum worker time and is a critical-path estimate, not host wall time.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 167,
+      "text": "The 15 measured repeats demonstrate why robust summaries are necessary. CPU scalar full-history storage had a median of 47.565 s, an IQR of 20.911 s, and a mean of 61.476 s because several system delays exceeded 100 s. The IQRs for CUDA strict double and single were only 0.0056 and 0.00035 s. MEX OpenMP SIMD in the final-state-only scenario formed two timing bands despite an unchanged checksum, so its minimum is not a reproducible performance estimate. Individual repeat times are shown in Fig. 1.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 168,
+      "text": "FINAL-STATE-ONLY RESULTS",
+      "in_table": false,
+      "role": "heading"
+    },
+    {
+      "index": 169,
+      "text": "In the first scenario, no 3 × B × N history arrays were created. CPU and MEX implementations kept only the current x, y, and z vectors, K and L, and auxiliary data in RAM; GPU implementations kept the corresponding working vectors in VRAM. Final states and a checksum were retained after N steps. These timings therefore characterize recurrence evaluation without intermediate-state storage.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 170,
+      "text": "Table 4 and Fig. 2 summarize this scenario. Scalar MATLAB required a median of 45.232 s (IQR 0.744 s). Direct vectorization reduced the median to 10.331 s (IQR 0.087 s), a factor of 4.38. Distributing scalar trajectories through parfor required 6.073 s (IQR 0.004 s), a factor of 7.45. The best result, 2.076 s (IQR 0.163 s), used eight thread workers and vector blocks of 1,750 trajectories; Kₜ was 21.78 and throughput was 5.927 billion updates/s.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 171,
+      "text": "Table 4",
+      "in_table": false,
+      "role": "table-label"
+    },
+    {
+      "index": 172,
+      "text": "Final-state-only performance for N = 307,674 and M = 40,000",
+      "in_table": false,
+      "role": "table-title"
+    },
+    {
+      "index": 173,
+      "text": "Method",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 174,
+      "text": "Resources",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 175,
+      "text": "Precision",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 176,
+      "text": "Median [IQR], s",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 177,
+      "text": "Kₜ = Tscalar/T",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 178,
+      "text": "Q, 10⁹ updates/s",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 179,
+      "text": "MATLAB scalar",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 180,
+      "text": "CPU; 1",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 181,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 182,
+      "text": "45.232 [0.744]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 183,
+      "text": "1.00",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 184,
+      "text": "0.272",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 185,
+      "text": "MATLAB vectorized",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 186,
+      "text": "CPU; 1",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 187,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 188,
+      "text": "10.331 [0.087]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 189,
+      "text": "4.38",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 190,
+      "text": "1.191",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 191,
+      "text": "MATLAB scalar + parfor",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 192,
+      "text": "CPU; 8",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 193,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 194,
+      "text": "6.073 [0.004]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 195,
+      "text": "7.45",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 196,
+      "text": "2.027",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 197,
+      "text": "MATLAB vector + parfor, B=1,000",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 198,
+      "text": "CPU; 8",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 199,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 200,
+      "text": "2.416 [0.052]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 201,
+      "text": "18.72",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 202,
+      "text": "5.094",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 203,
+      "text": "MATLAB vector + parfor, B=1,750",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 204,
+      "text": "CPU; 8",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 205,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 206,
+      "text": "2.076 [0.163]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 207,
+      "text": "21.78",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 208,
+      "text": "5.927",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 209,
+      "text": "MATLAB vector + parfor, B=2,000",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 210,
+      "text": "CPU; 8",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 211,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 212,
+      "text": "2.120 [0.031]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 213,
+      "text": "21.34",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 214,
+      "text": "5.805",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 215,
+      "text": "GPU direct single",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 216,
+      "text": "RTX 3060",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 217,
+      "text": "single",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 218,
+      "text": "19.834 [0.612]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 219,
+      "text": "2.28",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 220,
+      "text": "0.621",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 221,
+      "text": "GPU direct double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 222,
+      "text": "RTX 3060",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 223,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 224,
+      "text": "19.722 [0.414]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 225,
+      "text": "2.29",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 226,
+      "text": "0.624",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 227,
+      "text": "GPU arrayfun double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 228,
+      "text": "RTX 3060",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 229,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 230,
+      "text": "21.751 [0.207]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 231,
+      "text": "2.08",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 232,
+      "text": "0.566",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 233,
+      "text": "GPU, q=5,000, double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 234,
+      "text": "RTX 3060",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 235,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 236,
+      "text": "2.119 [0.0014]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 237,
+      "text": "21.35",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 238,
+      "text": "5.808",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 239,
+      "text": "GPU, q=5,000, single",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 240,
+      "text": "RTX 3060",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 241,
+      "text": "single",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 242,
+      "text": "0.291 [0.0014]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 243,
+      "text": "155.41",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 244,
+      "text": "42.285",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 245,
+      "text": "MEX OpenMP scalar",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 246,
+      "text": "CPU; 8",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 247,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 248,
+      "text": "6.244 [0.017]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 249,
+      "text": "7.24",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 250,
+      "text": "1.971",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 251,
+      "text": "MEX OpenMP SIMD",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 252,
+      "text": "CPU; 8",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 253,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 254,
+      "text": "10.894 [4.814]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 255,
+      "text": "4.15",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 256,
+      "text": "1.130",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 257,
+      "text": "The same complete-run timings and throughputs are compared graphically in Fig. 2.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 258,
+      "text": "",
+      "in_table": false,
+      "role": "figure"
+    },
+    {
+      "index": 259,
+      "text": "Fig. 2. Complete final-state-only run: a - median computation time; b - throughput. Current states were retained during integration, followed by final states and a checksum. Values summarize 15 complete repeats",
+      "in_table": false,
+      "role": "figure-caption"
+    },
+    {
+      "index": 260,
+      "text": "For scalar+parfor with eight workers, Kₜ = 7.45 corresponds to 93.1% parallel efficiency and is consistent with trajectory independence. For the combined method, algorithmic and parallel gains must be separated: relative to single-thread vectorization, eight workers reduced time by a factor of 4.98, giving 62.2% parallel efficiency. The overall Kₜ = 21.78 combines vectorized data organization and subsequent block distribution; it is not evidence of superlinear parallel scaling.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 261,
+      "text": "With eight workers, B = 1,750 and B = 2,000 gave medians of 2.0763 and 2.1200 s, IQRs of 0.1628 and 0.0314 s, and standard deviations of 0.0905 and 0.0379 s. The 2.1% difference between medians is small relative to repeat variability. The evidence therefore supports a practical optimum region of B = 1,750-2,000 rather than a universal single optimum.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 262,
+      "text": "FULL-HISTORY RESULTS",
+      "in_table": false,
+      "role": "heading"
+    },
+    {
+      "index": 263,
+      "text": "In the second scenario, every computed x, y, and z value was written to preallocated arrays (Table 5).",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 264,
+      "text": "Table 5",
+      "in_table": false,
+      "role": "table-label"
+    },
+    {
+      "index": 265,
+      "text": "Computation with storage of every trajectory state in RAM or VRAM",
+      "in_table": false,
+      "role": "table-title"
+    },
+    {
+      "index": 266,
+      "text": "Method",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 267,
+      "text": "Memory",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 268,
+      "text": "Precision",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 269,
+      "text": "B",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 270,
+      "text": "Time, s",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 271,
+      "text": "Statistic and timing scope",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 272,
+      "text": "CPU classic + parfor",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 273,
+      "text": "RAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 274,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 275,
+      "text": "706 × 8",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 276,
+      "text": "18.873 [IQR 0.470]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 277,
+      "text": "median of maximum worker time",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 278,
+      "text": "CPU vector + parfor",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 279,
+      "text": "RAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 280,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 281,
+      "text": "706 × 8",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 282,
+      "text": "19.647 [IQR 0.501]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 283,
+      "text": "median of maximum worker time",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 284,
+      "text": "CPU vector direct",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 285,
+      "text": "RAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 286,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 287,
+      "text": "5,650",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 288,
+      "text": "41.999 [IQR 0.317]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 289,
+      "text": "median host wall time",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 290,
+      "text": "CUDA strict",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 291,
+      "text": "VRAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 292,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 293,
+      "text": "546",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 294,
+      "text": "22.595 [IQR 0.0056]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 295,
+      "text": "median host wall time",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 296,
+      "text": "CUDA FMA",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 297,
+      "text": "VRAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 298,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 299,
+      "text": "546",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 300,
+      "text": "11.419 [IQR 0.0013]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 301,
+      "text": "median host wall time",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 302,
+      "text": "CUDA strict",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 303,
+      "text": "VRAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 304,
+      "text": "single",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 305,
+      "text": "1,024",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 306,
+      "text": "0.598 [IQR 0.00035]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 307,
+      "text": "median host wall time",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 308,
+      "text": "CUDA FMA",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 309,
+      "text": "VRAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 310,
+      "text": "single",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 311,
+      "text": "1,092",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 312,
+      "text": "0.891 [IQR 0.00064]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 313,
+      "text": "median host wall time",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 314,
+      "text": "MEX OpenMP SIMD",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 315,
+      "text": "RAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 316,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 317,
+      "text": "2,048",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 318,
+      "text": "24.820 [IQR 0.228]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 319,
+      "text": "median host wall time",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 320,
+      "text": "MEX OpenMP scalar",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 321,
+      "text": "RAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 322,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 323,
+      "text": "2,048",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 324,
+      "text": "229.857; 229.998",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 325,
+      "text": "two complete runs; exploratory mean 229.928 s",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 326,
+      "text": "MEX serial scalar",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 327,
+      "text": "RAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 328,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 329,
+      "text": "2,048",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 330,
+      "text": "461.613; 462.402",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 331,
+      "text": "two complete runs; exploratory mean 462.008 s",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 332,
+      "text": "These arrays resided in RAM for CPU and MEX and in VRAM for CUDA. Each method allocated its buffer before timing and reused it across parameter-grid blocks and repeats. The 38.86 GiB RAM budget allowed either 5,650 serial trajectories or 706 trajectories on each of eight workers. The 3.75 GiB usable VRAM budget held 546 double-precision or 1,092 single-precision trajectories. A pass generated 275.08 GiB of logical double-precision history, but only one active block was resident at a time. Results are listed in.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 333,
+      "text": "The distinction between device-local storage and subsequent placement in RAM is shown in Fig. 3.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 334,
+      "text": "",
+      "in_table": false,
+      "role": "figure"
+    },
+    {
+      "index": 335,
+      "text": "Fig. 3. Full-history scenario: a - computation and storage, after which CPU/MEX data remain in RAM and CUDA data remain in VRAM; CPU parfor values are maximum-worker critical-path estimates; b - estimated sequential pipeline when every CUDA block is additionally copied from VRAM to RAM. Bars show point estimates; IQRs and timing scopes are reported in Table 5.",
+      "in_table": false,
+      "role": "figure-caption"
+    },
+    {
+      "index": 336,
+      "text": "In double precision, CPU classic+parfor produced a maximum-worker critical-path estimate of 18.873 s (IQR 0.470 s), whereas CUDA strict wrote the histories to VRAM in a host-observed median of 22.595 s (IQR 0.0056 s). The CPU value is not the wall time around the complete parfor statement and must not be interpreted as end-to-end runtime. The methods also finish with data in different memory types, and the complete histories were not compared element by element. CPU-side analysis requires an additional VRAM-to-RAM transfer for CUDA, whereas GPU-side analysis does not. In single precision, CUDA strict with B = 1,024 generated the histories in VRAM in 0.598 s (IQR 0.00035 s). CUDA FMA double was faster but used a different rounding sequence and is treated separately.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 337,
+      "text": "GPU WITH FINAL-STATE-ONLY OUTPUT",
+      "in_table": false,
+      "role": "heading"
+    },
+    {
+      "index": 338,
+      "text": "The initial GPU implementation produced an apparently contradictory result: direct double and direct single required 19.722 and 19.834 s, respectively. Single precision offered no advantage and was about 9.6 times slower than the best CPU vector+parfor result. This does not characterize peak CUDA performance. MATLAB controlled the time loop: direct code issued approximately three GPU operations at each of 307,674 steps, while stepwise arrayfun launched one kernel per step. The recurrence prevents overlap of adjacent steps, so launch overhead and repeated global-memory traffic accumulated [18].",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 339,
+      "text": "To test the combined effect of launch count and global-memory traffic, a gpuArray.arrayfun-compiled function performed q sequential Euler steps within one CUDA kernel [13, 19]. MATLAB launched only ceil(N/q) kernels, while local x, y, z, K, and L values were reused within each thread. At q = 5,000, the launch count fell to 62. Single precision required a median of 0.291 s (IQR 0.0014 s), 155.4 times faster than scalar CPU and 7.13 times faster than the best CPU vector+parfor configuration. Double precision required 2.119 s (IQR 0.0014 s), only 2.1% slower than the best CPU result. The dependence on q is shown in Fig. 5.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 340,
+      "text": "",
+      "in_table": false,
+      "role": "figure"
+    },
+    {
+      "index": 341,
+      "text": "Fig. 4. Effect of q sequential Euler steps per CUDA kernel. Values are medians of 15 complete repeats. Both panels use logarithmic x-axes; panel a also uses a logarithmic y-axis. The dotted line is the best CPU vector+parfor median. Launch count falls from 30,768 to 62, and single-precision throughput reaches 42.28 billion updates/s.",
+      "in_table": false,
+      "role": "figure-caption"
+    },
+    {
+      "index": 342,
+      "text": "Grouping steps reduces both launches and repeated global-memory traffic. A stepwise kernel for one trajectory reads at least x, y, z, K, and L and writes three new states - approximately 64 bytes per double-precision step. Across 12.307 billion updates, this is about 787.6 GB of logical traffic. At q = 5,000, the same states are read and written only 62 times while intermediate values remain in thread registers, reducing estimated state traffic to about 0.159 GB. High VRAM bandwidth alone therefore did not make the stepwise implementation fast; it could not offset hundreds of thousands of launches and repeated full-array passes.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 343,
+      "text": "The single-versus-double difference became visible only after step grouping. Fixed launch costs were distributed across q steps, reducing overhead per step. In direct stepwise code, single precision was 0.6% slower, indicating overhead dominance. At q = 5,000, single was 7.28 times faster than double. For compute capability 8.6, NVIDIA documents substantially higher FP32 than FP64 arithmetic throughput [20]. The measured ratio is also limited by the dependent recurrence and loop control. Double precision favors CPU vector+parfor; when single precision is validated against the downstream analysis metric, the q-step GPU implementation is preferable.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 344,
+      "text": "CUDA ARITHMETIC WITH FULL-HISTORY STORAGE",
+      "in_table": false,
+      "role": "heading"
+    },
+    {
+      "index": 345,
+      "text": "Two arithmetic variants were evaluated for the specialized CUDA kernel that integrates a trajectory and writes every state to VRAM in one invocation. Strict mode reproduces a sequence of separate MATLAB-like multiplications and additions; FMA mode permits hardware contraction. Arithmetic results are given in Table 6, and the CUDA trajectory-block sweep is shown in Fig. 5.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 346,
+      "text": "Table 6",
+      "in_table": false,
+      "role": "table-label"
+    },
+    {
+      "index": 347,
+      "text": "Arithmetic modes of the specialized CUDA kernel; 15 complete repeats",
+      "in_table": false,
+      "role": "table-title"
+    },
+    {
+      "index": 348,
+      "text": "Mode",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 349,
+      "text": "Precision",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 350,
+      "text": "B / blocks",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 351,
+      "text": "Median [IQR], s",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 352,
+      "text": "Checksum CPU",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 353,
+      "text": "Absolute checksum difference: CPU and CUDA",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 354,
+      "text": "CUDA strict double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 355,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 356,
+      "text": "546 / 74",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 357,
+      "text": "22.595 [0.0056]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 358,
+      "text": "187794.788165805",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 359,
+      "text": "1.98 × 10⁻⁹",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 360,
+      "text": "CUDA FMA double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 361,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 362,
+      "text": "546 / 74",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 363,
+      "text": "11.419 [0.0013]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 364,
+      "text": "186846.967865913",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 365,
+      "text": "9.48 × 10²",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 366,
+      "text": "CUDA strict single",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 367,
+      "text": "single",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 368,
+      "text": "1,024 / 40",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 369,
+      "text": "0.598 [0.00035]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 370,
+      "text": "186194.433793289",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 371,
+      "text": "1.60 × 10³",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 372,
+      "text": "CUDA FMA single",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 373,
+      "text": "single",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 374,
+      "text": "1,092 / 37",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 375,
+      "text": "0.891 [0.00064]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 376,
+      "text": "187211.916350607",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 377,
+      "text": "5.83 × 10²",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 378,
+      "text": "The effects of B on time and logical VRAM write rate are shown in Fig. 5.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 379,
+      "text": "",
+      "in_table": false,
+      "role": "figure"
+    },
+    {
+      "index": 380,
+      "text": "Fig. 5. Effect of CUDA trajectory-block size B during strict full-history storage in VRAM. Points are medians of 15 complete repeats; panel a uses a logarithmic y-axis. A star marks the smallest measured time. The dotted line in panel b is a separate VRAM-bandwidth microbenchmark, not an error bound",
+      "in_table": false,
+      "role": "figure-caption"
+    },
+    {
+      "index": 381,
+      "text": "Due to NVIDIA CUDA Compiler (NVCC) can contract operations - separate arithmetic tests were required. FMA evaluates a·b + c with one rounding, whereas separate multiply and add instructions round twice. In a chaotic recurrence, even a small local difference can accumulate. At the same B = 546, CUDA FMA double reduced the median from 22.595 to 11.419 s, a factor of 1.98, but its final checksum differed from MATLAB by 947.82. The run therefore cannot be regarded as elementwise equivalent after 307,674 steps; a single checksum also cannot locate or characterize trajectory-wise differences.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 382,
+      "text": "CUDA strict used explicit round-to-nearest addition, subtraction, and multiplication intrinsics (__dadd_rn, __dsub_rn, __dmul_rn, and their float counterparts) to prevent FMA contraction and preserve operation order. The double-precision final-state checksum agreed with MATLAB to the printed precision, although the complete histories were not compared element by element. Strict and FMA are separate methods. At B = 1,092, strict single (0.894 s) and FMA single (0.891 s) were nearly identical, consistent with a storage-limited regime. At B = 1,024, strict single fell to 0.598 s, 33.1% below B = 1,092. Because 1,024 is divisible by the CUDA block size of 256 while 1,092 requires a partially occupied fifth block, launch geometry is a plausible explanation, but hardware-counter profiling is required to establish the mechanism.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 383,
+      "text": "A final checksum difference does not establish whether FMA changes the qualitative signal properties. Chaotic trajectories can rapidly lose pointwise correlation while remaining on the same attractor with similar invariant characteristics. Comparison of strict, FMA, and single precision using largest Lyapunov exponents, correlation and fractal dimensions, entropy measures, spectra, distributions of extrema, and classification stability on the K-L map will be the objects of the following works. Until then, FMA is a faster but numerically different mode, not an unconditional replacement for strict double. Measured VRAM-to-RAM transfer values are listed in Table 7.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 384,
+      "text": "Table 7",
+      "in_table": false,
+      "role": "table-label"
+    },
+    {
+      "index": 385,
+      "text": "Transfer of one full-history block from VRAM to RAM with gather",
+      "in_table": false,
+      "role": "table-title"
+    },
+    {
+      "index": 386,
+      "text": "Precision",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 387,
+      "text": "B",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 388,
+      "text": "Block, GiB",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 389,
+      "text": "Median [IQR], s",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 390,
+      "text": "GiB/s",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 391,
+      "text": "Full grid, s",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 392,
+      "text": "double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 393,
+      "text": "546",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 394,
+      "text": "3.755",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 395,
+      "text": "0.673 [0.052]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 396,
+      "text": "5.58",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 397,
+      "text": "49.33",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 398,
+      "text": "single",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 399,
+      "text": "1,092",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 400,
+      "text": "3.755",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 401,
+      "text": "0.676 [0.027]",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 402,
+      "text": "5.56",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 403,
+      "text": "24.76",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 404,
+      "text": "The gather benchmark created an ordinary MATLAB array in RAM and copied one complete time-series block from VRAM; GPU allocation and initialization were excluded. In double precision, copying 3.755 GiB took a median of 0.673 s (IQR 0.052 s; 5.58 GiB/s), giving a sequential estimate of 49.33 s for all 74 blocks. In single precision, the median was 0.676 s per block (IQR 0.027 s) and 24.76 s for all 37 blocks. The sequential computation-plus-gather estimates are therefore 71.92 s for strict double, 60.74 s for FMA double, and 25.35 s for the best strict single. PCIe transfer dominates when histories are required in RAM. Double buffering could overlap computation and transfer but requires a separate asynchronous test.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 405,
+      "text": "MEX LOOP ORGANIZATION AND MEMORY LOCALITY",
+      "in_table": false,
+      "role": "heading"
+    },
+    {
+      "index": 406,
+      "text": "Compilation to MEX did not guarantee high performance. Without history, serial scalar MEX required a median of 72.488 s, eight-thread OpenMP scalar 6.244 s, and OpenMP SIMD 10.894 s. SIMD repeats formed two timing bands between 2.88 and 10.9 s with an unchanged checksum, so the minimum was not used as the reported result. With full-history storage, the SIMD loop placed time outside and adjacent trajectories inside, producing contiguous RAM writes and a median of 24.820 s (IQR 0.228 s). The scalar MEX loop placed trajectories outside, so successive samples of one trajectory were separated by a trajectory-count stride. The two exploratory complete runs were 461.613 and 462.402 s for serial scalar (mean 462.008 s) and 229.857 and 229.998 s for OpenMP scalar (mean 229.928 s). Loop nesting and spatial write locality, rather than compilation alone, determined performance.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 407,
+      "text": "RESULTS AND DISCUSSION",
+      "in_table": false,
+      "role": "heading"
+    },
+    {
+      "index": 408,
+      "text": "Taken together, the results show that launch frequency and data placement matter as much as raw memory bandwidth. The measured logical read-plus-write bandwidth was 17.78 GiB/s for RAM and 286.39 GiB/s for VRAM; RAM-to-GPU and GPU-to-RAM transfers reached 6.05 and 5.30 GiB/s. Stepwise GPU code remained slow because it paid launch and state-traffic costs at every step. PCIe transfer became the main cost only when complete histories had to be moved into ordinary MATLAB arrays. Table 8 summarizes these results.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 409,
+      "text": "Table 8",
+      "in_table": false,
+      "role": "table-label"
+    },
+    {
+      "index": 410,
+      "text": "Memory characteristics and full-history storage cost",
+      "in_table": false,
+      "role": "table-title"
+    },
+    {
+      "index": 411,
+      "text": "Measurement",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 412,
+      "text": "Result",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 413,
+      "text": "Conditions and note",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 414,
+      "text": "RAM read + write",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 415,
+      "text": "17.78 GiB/s",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 416,
+      "text": "512 MiB",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 417,
+      "text": "VRAM read + write",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 418,
+      "text": "286.39 GiB/s",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 419,
+      "text": "512 MiB",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 420,
+      "text": "RAM → GPU",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 421,
+      "text": "6.05 GiB/s",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 422,
+      "text": "512 MiB",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 423,
+      "text": "GPU → RAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 424,
+      "text": "5.30 GiB/s",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 425,
+      "text": "512 MiB",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 426,
+      "text": "Full-grid time series",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 427,
+      "text": "275.08 GiB",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 428,
+      "text": "calculated logical volume, double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 429,
+      "text": "Reusable CPU buffer",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 430,
+      "text": "38.86 GiB RAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 431,
+      "text": "up to 5,650 trajectories or 706 × 8 workers",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 432,
+      "text": "Specialized CUDA kernel, double",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 433,
+      "text": "3.75 GiB VRAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 434,
+      "text": "546 trajectories; 74 blocks",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 435,
+      "text": "Specialized CUDA kernel, single",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 436,
+      "text": "3.75 GiB VRAM",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 437,
+      "text": "1,092 trajectories; 37 blocks",
+      "in_table": true,
+      "role": "table"
+    },
+    {
+      "index": 438,
+      "text": "A contiguous 3 × M × N history array would require about 275.08 GiB and cannot fit in the available RAM or VRAM. The final-state-only scenario kept only the last x, y, z, and a checksum. For full-history runs, the grid was split into memory-safe blocks and one preallocated buffer was reused. The 275.08 GiB value is the total data written during a pass, not memory occupied at once.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 439,
+      "text": "Keeping every sample is a useful stress test, but it is not required for every bifurcation workflow. Local maxima, Poincaré points, chaos indicators, or other compact features can be computed during integration so that only the final classification is returned [7-11].",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 440,
+      "text": "CUDA strict double was checked through the final-state checksum; its absolute difference from MATLAB was 1.98 × 10⁻⁹. A checksum is diagnostic and does not prove trajectory-wise equivalence or equality of the stored histories. Single and FMA checksums diverge after 307,674 steps because rounding errors accumulate differently. Their attractors require comparison through distributions, invariant characteristics, and regime classification rather than long-horizon pointwise equality.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 441,
+      "text": "LIMITATIONS AND SCOPE OF APPLICABILITY",
+      "in_table": false,
+      "role": "heading"
+    },
+    {
+      "index": 442,
+      "text": "The absolute timings apply only to the tested hardware and software. RAM and VRAM limits also restricted the full-history values of B, so the measured set cannot reveal a universal MATLAB threshold. Adaptive integrators, other difference schemes, and more complex right-hand sides need separate measurements. Full-history method families ran in a fixed order, so method effects cannot be fully separated from temporal drift.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 443,
+      "text": "GPU-to-RAM time was estimated as the sequential sum of actual gather operations for individual blocks; asynchronous overlap requires a dedicated experiment. parfor+gpuArray was not tested because the workstation had one GPU, while a valid test requires a multi-GPU system with one device per worker. Chaos classification, map construction, and invariant-based validation of FMA and single precision remain outside the present benchmark.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 444,
+      "text": "CONCLUSIONS AND FUTURE WORK",
+      "in_table": false,
+      "role": "heading"
+    },
+    {
+      "index": 445,
+      "text": "On this workstation, the fastest method depended on the required output. For final states, eight CPU workers reduced double-precision time from 45.232 to 2.076 s (21.78-fold), while the q = 5,000 GPU method took 2.119 s in double and 0.291 s in single precision. For full histories, CUDA strict single took 0.598 s in VRAM. CPU classic+parfor gave an 18.873 s maximum-worker critical-path estimate in RAM, not host-observed total time; CUDA strict double took 22.595 s in VRAM and 71.92 s after transfer to RAM. FMA changed the checksum, so future work should measure full parfor wall time and compare invariant properties across precisions and solvers.",
+      "in_table": false,
+      "role": "body"
+    },
+    {
+      "index": 446,
+      "text": "References",
+      "in_table": false,
+      "role": "reference-heading"
+    },
+    {
+      "index": 447,
+      "text": "1. Rucklidge A. M. Chaos in models of double convection. Journal of Fluid Mechanics. 1992. Vol. 237. P. 209-229. https://doi.org/10.1017/S0022112092003392",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 448,
+      "text": "2. Wang X. Si’lnikov chaos and Hopf bifurcation analysis of Rucklidge system. Chaos, Solitons & Fractals. 2009. Vol. 42, No. 4. P. 2208-2217. https://doi.org/10.1016/j.chaos.2009.03.137",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 449,
+      "text": "3. Ene R.-D., Pop N., Badarau R. Exact Parametric and Semi-Analytical Solutions for the Rucklidge-Type Dynamical System. Mathematics. 2025. Vol. 13, No. 13. Art. 2052. https://doi.org/10.3390/math13132052",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 450,
+      "text": "4. Golevych O. B., Pyvovar O. S., Trotsyshyn I. V. The ordering of chaotic signals’ ensembles and methods of their use in ultra-wideband telecommunication systems. Digital Technologies. 2015. No. 17. P. 181-191. https://elar.khmnu.edu.ua/handle/123456789/4325",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 451,
+      "text": "5. Golevych O. B. Ensembles of broadband chaotic telecommunication signals with reduced system interference: Candidate of Technical Sciences dissertation, specialty 05.12.13. Odesa National Academy of Telecommunications named after O.S. Popov. Odesa, 2015. Registration No. 0415U005890. https://uacademic.info/ua/document/0415U005890#!",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 452,
+      "text": "6. Marszalek W., Sadecki J. Parallel Computing of 2-D Bifurcation Diagrams in Circuits With Electric Arcs. IEEE Transactions on Plasma Science. 2019. Vol. 47, No. 1. P. 706-713. https://doi.org/10.1109/TPS.2018.2871576",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 453,
+      "text": "7. Marszalek W., Podhaisky H., Sadecki J. Computing Two-Parameter Bifurcation Diagrams for Oscillating Circuits and Systems. IEEE Access. 2019. Vol. 7. P. 115829-115835. https://doi.org/10.1109/ACCESS.2019.2936175",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 454,
+      "text": "8. Walczak M., Marszalek W., Sadecki J. Using the 0-1 Test for Chaos in Nonlinear Continuous Systems With Two Varying Parameters: Parallel Computations. IEEE Access. 2019. Vol. 7. P. 154375-154385. https://doi.org/10.1109/ACCESS.2019.2948989",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 455,
+      "text": "9. Marszalek W., Walczak M., Sadecki J. Two-Parameter 0-1 Test for Chaos and Sample Entropy Bifurcation Diagrams for Nonlinear Oscillating Systems. IEEE Access. 2021. Vol. 9. P. 22679-22687. https://doi.org/10.1109/ACCESS.2021.3055715",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 456,
+      "text": "10. Walczak M., Marszalek W. Computational Issues in Nonlinear Dynamical Systems: Creating Bifurcation Diagrams of Lyapunov Exponents Using a Novel Adaptive Approach. IEEE Access. 2025. Vol. 13. P. 141234-141244. https://doi.org/10.1109/ACCESS.2025.3587410",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 457,
+      "text": "11. Hassona S., Marszalek W., Sadecki J. Time series classification and creation of 2D bifurcation diagrams in nonlinear dynamical systems using supervised machine learning methods. Applied Soft Computing. 2021. Vol. 113. Art. 107874. https://doi.org/10.1016/j.asoc.2021.107874",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 458,
+      "text": "12. Tverdyi D., Parovik R. A Study of the Efficiency of Parallel Computing for Constructing Bifurcation Diagrams of the Fractional Selkov Oscillator with Variable Coefficients and Memory. Computation. 2026. Vol. 14, No. 2. Art. 32. https://doi.org/10.3390/computation14020032",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 459,
+      "text": "13. Pala A., Machaczek M. Computing of 3D Bifurcation Diagrams With Nvidia CUDA Technology. IEEE Access. 2020. Vol. 8. P. 157773-157780. https://doi.org/10.1109/ACCESS.2020.3019633",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 460,
+      "text": "14. Rybin V., Butusov D., Shirnin K., Ostrovskii V. Revealing Hidden Features of Chaotic Systems Using High-Performance Bifurcation Analysis Tools Based on CUDA Technology. International Journal of Bifurcation and Chaos. 2024. Vol. 34, No. 11. Art. 2450134. https://doi.org/10.1142/S0218127424501347",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 461,
+      "text": "15. Ahnert K., Demidov D., Mulansky M. Solving Ordinary Differential Equations on GPUs. In: Numerical Computations with GPUs. Cham: Springer, 2014. P. 125-157. https://doi.org/10.1007/978-3-319-06548-9_7",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 462,
+      "text": "16. MathWorks. Using Vectorization. MATLAB Documentation. [Online]. Available: https://www.mathworks.com/help/matlab/matlab_prog/vectorization.html",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 463,
+      "text": "17. MathWorks. Choose Between Thread-Based and Process-Based Environments. Parallel Computing Toolbox Documentation. [Online]. Available: https://www.mathworks.com/help/parallel-computing/choose-between-thread-based-and-process-based-environments.html",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 464,
+      "text": "18. MathWorks. Measure and Improve GPU Performance. Parallel Computing Toolbox Documentation. [Online]. Available: https://www.mathworks.com/help/parallel-computing/measure-and-improve-gpu-performance.html",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 465,
+      "text": "19. MathWorks. arrayfun: Apply Function to Each Element of Array on GPU. Parallel Computing Toolbox Documentation. [Online]. Available: https://www.mathworks.com/help/parallel-computing/gpuarray.arrayfun.html",
+      "in_table": false,
+      "role": "reference"
+    },
+    {
+      "index": 466,
+      "text": "20. NVIDIA. CUDA C++ Programming Guide: Throughput of Native Arithmetic Instructions. [Online]. Available: https://docs.nvidia.com/cuda/archive/12.6.0/cuda-c-programming-guide/index.html",
+      "in_table": false,
+      "role": "reference"
+    }
+  ]
+}

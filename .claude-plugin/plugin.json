@@ -2,7 +2,7 @@
   "name": "kpi-skills",
   "displayName": "KPI Skills",
   "description": "A collection of Claude Code skills gathered along a PhD path at Igor Sikorsky Kyiv Polytechnic Institute (KPI). Skills automate recurring academic and departmental tasks.",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "author": {
     "name": "Danylo Vorvul",
     "email": "danylo.vorvul@meridian-ai.com"
@@ -26,6 +26,10 @@
     "dissertation",
     "dissertation-writing",
     "121",
-    "software-engineering"
+    "software-engineering",
+    "plagiarism",
+    "academic-integrity",
+    "ai-detection",
+    "unicheck"
   ]
 }

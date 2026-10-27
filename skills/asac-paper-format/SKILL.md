@@ -28,7 +28,20 @@ References, loaded on demand:
 4. `references/published-papers-review.md`: what recent accepted papers look like and
    where they deviate.
 5. `assets/official/sample_eng.docx`, `assets/official/sample_ua.docx`: the journal's own
-   templates. `assets/example/paper.md`: a complete worked source to copy.
+   templates. `assets/example/paper.md`: a complete worked source to copy (fictional
+   authors and numbers, so every field is filled).
+6. `assets/examples/`: two REAL published papers of the journal (2026, CC BY-NC-SA 4.0)
+   converted to `paper.md`, each with a `README.md` (source, DOI, licence, fidelity gaps,
+   what the checker reports):
+   1. `en-software-cost-fuzzy/`: English, equations, one figure, DSTU-like references;
+   2. `uk-google-classroom-export/`: Ukrainian, four figures, one table.
+
+   Read one to see how an accepted paper is laid out (an English one for `language: en`,
+   the Ukrainian one for `uk`, figure/table cross-references, short abstracts). They are
+   not templates: their e-mails, English fields or Ukrainian keywords are `TODO` because
+   the journal does not publish them, and their checker findings (short abstracts, few
+   references) are real flaws of accepted papers, not targets to copy. For a new paper
+   start from `assets/example/paper.md`.
 
 Work in a directory of the user's choice (e.g. `./asac-submission/`), never inside this
 skill directory. Keep `paper.md`, images, the output `.docx` and `preview/` there.
@@ -50,7 +63,8 @@ skill directory. Keep `paper.md`, images, the output `.docx` and `preview/` ther
 2. **PDF only**: ask for the source file. If the user cannot provide it, read the PDF
    and retype it into `paper.md`.
 3. **Pasted text or notes**: start from `cp "${CLAUDE_SKILL_DIR}/assets/example/paper.md"
-   paper.md` and replace everything.
+   paper.md` and replace everything. Use the fictional
+   example as the template, never the real ones.
 4. Ask only for what blocks a correct file and cannot be found in the material:
    1. ORCID, e-mail, position and degree of each author;
    2. the corresponding author's phone;

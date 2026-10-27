@@ -15,6 +15,8 @@ This repository is both a Claude Code **plugin** and its own **marketplace** —
 | `vottp-paper-format` | `kpi-skills:vottp-paper-format` | Formats and checks manuscripts for «Вимірювальна та обчислювальна техніка в технологічних процесах» ([vottp.khmnu.edu.ua](https://vottp.khmnu.edu.ua)): sourced requirements, three recent paper reviews, DOCX layout with content preservation, and a manual formatting/content compliance report. Records conflicting journal instructions explicitly. |
 | `phd-seminar-review` | `kpi-skills:phd-seminar-review` | Reviews the **content** of a PhD seminar / council / defence talk for specialty **121 «Інженерія програмного забезпечення»** at KPI (`.ppt`/`.pptx`/`.odp`/`.key`/`.pdf`): required elements, scientific novelty wording, the KPI 121 rule that one result must be a software **architecture**, tasks↔novelty↔conclusions, publication credit under Порядок №44, language and readability; writes a slide-by-slide report with fixes and likely council questions. |
 | `brick-writer-121` | `kpi-skills:brick-writer-121` | Writes and reviews a PhD dissertation («brick») for specialty **121 «Інженерія програмного забезпечення»** at KPI part by part: write mode drafts анотація/вступ/розділ N/висновки from the project's concept, novelty statements and facts following the genre of two bundled defended KPI 121 dissertations (Барабаш 2024, Бочок 2026, full texts + analysis) and the normative requirements (Постанова КМУ №44, наказ МОН №40, Стандарт №481); analyse mode runs `check_chapter.py` / `brick_status.py` (structure, figure/table/formula numbering, citations, novelty formula «вперше/удосконалено/дістало подальшого розвитку … відрізняється … дозволяє», mandatory вступ blocks, object = process, aim = result, 121 fit and the architecture rule, numbers traceable to tables, calques, placeholders, cross-part novelty drift) and writes an opponent-style review report. Never invents results, numbers or sources. |
+| `plagiarism-check` | `kpi-skills:plagiarism-check` | Rehearses the academic-plagiarism check of a dissertation/article (.docx/.pdf/.md/.tex/.txt, UA/EN) with free local tools before the official Unicheck scan: exact and near-verbatim reuse against a local corpus (own publications reported separately as self-reuse) and against pages harvested from the open web and open-access repositories (ddgs scraping, CORE, OpenAlex), optional multilingual paraphrase pass, Unicheck-style highlighted HTML report, reference list/quotes excluded, KPI-forbidden text tampering detected. **Not** a substitute for Unicheck/Turnitin: it has none of their private indexes, and every report says so. |
+| `ai-text-detector` | `kpi-skills:ai-text-detector` | Scores a manuscript for AI-generated text with open, local detectors: Binoculars and Fast-DetectGPT (zero-shot, Qwen3 base/instruct pairs that cover Ukrainian) and the Desklib DeBERTa classifier (English only), per ~220-word chunk, with a calibration script against the author's own known-human text and a report that states thresholds, provenance and measured error. Measured here: it detects text from small open models but **not** 2026 frontier-model prose (Claude) in Ukrainian or English — see the skill's `references/methods.md`; paid detectors are not reproducible for free. |
 
 ### `brick-writer-121`
 
@@ -85,6 +87,78 @@ This repository is both a Claude Code **plugin** and its own **marketplace** —
   ```
 - **When the rules change:** update `references/requirements.md`, `references/rules.md`,
   `scripts/check_deck.py` and `tests/phd-seminar-review/test_seminar.py` together.
+
+### `plagiarism-check`
+
+- **Triggers:** "перевір на плагіат", "перевір на антиплагіат / унікальність", "самоплагіат",
+  "check my thesis for plagiarism", compare a dissertation with the author's own articles,
+  or find where a passage came from.
+- **Requirements:** [`uv`](https://docs.astral.sh/uv/) (PEP 723 scripts: python-docx, PyMuPDF;
+  the web checker adds ddgs, trafilatura, requests; `--semantic` adds sentence-transformers and
+  downloads `intfloat/multilingual-e5-small`). Internet only for `check_web.py`; nothing but
+  9-word search phrases leaves the machine.
+- **Quick start:**
+  ```bash
+  S=skills/plagiarism-check/scripts
+  uv run $S/check_local.py thesis.docx --corpus sources/ --own my-papers/ --out plag-check [--semantic]
+  uv run $S/check_web.py thesis.docx --out plag-check --queries 40 --engines ddgs,core [--own my-papers/]
+  open plag-check/plagiarism-report.html      # highlighted text; .md and .json next to it
+  ```
+- **Honest scope:** external similarity is a *lower bound*: the free sources are unofficial
+  search-page scraping (often empty for Ukrainian), CORE open-access full texts and OpenAlex
+  abstracts. Other students' theses, Ukrainian university archives and paywalled journals are
+  only in Unicheck/StrikePlagiarism/Turnitin. See `references/methods.md` and `references/sources.md`.
+- **Internal layout** (`skills/plagiarism-check/`):
+  ```
+  SKILL.md                    # workflow: intake -> corpus -> local/web check -> report -> advice
+  scripts/
+  ├── check_local.py          # target vs local corpus (+ --own folders, --semantic)
+  ├── check_web.py            # phrase search (ddgs/CORE/OpenAlex) -> web-corpus/ -> same matcher
+  ├── match_engine.py         # 5-word shingles, diagonal chaining, coverage, e5 paraphrase pass
+  ├── plag_report.py          # .md / .html (highlighted) / .json writers
+  └── text_common.py          # extraction (.docx/.pdf/.md/.tex/.txt/.odt), paragraph kinds, tampering check
+  references/
+  ├── methods.md              # algorithm, parameters, commercial checkers compared, reading the %
+  ├── sources.md              # free search sources, limits, keys, measured behaviour
+  └── requirements.md         # KPI Положення / Unicheck instruction (verified parts), self-reuse, MON
+  ```
+
+### `ai-text-detector`
+
+- **Triggers:** "перевір на ШІ / на GPT", "чи виглядає текст як згенерований", "does this look
+  AI-generated", pre-check before a Turnitin/Unicheck AI scan, or ranking passages a detector
+  would flag.
+- **Requirements:** [`uv`](https://docs.astral.sh/uv/) (PEP 723 scripts: torch, transformers,
+  python-docx, PyMuPDF); 2.4–16 GB of model downloads on first run (Qwen3-0.6B/1.7B/4B
+  base+instruct pairs, Apache-2.0; Desklib DeBERTa, MIT); Apple Silicon/CUDA/CPU. Offline after that.
+- **Quick start:**
+  ```bash
+  S=skills/ai-text-detector/scripts
+  uv run $S/detect_ai.py thesis.docx --out ai-check --method binoculars --size medium
+  # better: calibrate on the author's own known-human texts + AI samples in the same register
+  uv run $S/calibrate.py --human human/ --ai ai/ --method binoculars --size medium --out calibration.json
+  uv run $S/detect_ai.py thesis.docx --out ai-check --calibration calibration.json
+  ```
+- **Honest scope:** measured on this repository's author's machine (2026-10): the zero-shot
+  detectors separate text generated by the small Qwen models perfectly (AUROC 1.0) but do not
+  separate Claude-written academic Ukrainian or English from human text (AUROC 0.4–0.6 with
+  0.6B–4B pairs); the English Desklib classifier catches Claude text but flags ~20 % of formal
+  human encyclopedic chunks with probability > 0.9. Paid detectors (Turnitin AI, GPTZero,
+  Originality) use proprietary, continuously retrained models and are not reproducible for free;
+  none of them, paid or free, is evidence of authorship. See `references/methods.md` and
+  `references/paid-vs-free.md`.
+- **Internal layout** (`skills/ai-text-detector/`):
+  ```
+  SKILL.md                    # workflow: intake -> calibration -> scoring -> reading the report
+  scripts/
+  ├── detect_ai.py            # chunked scoring, ai-report.md/.json, caveats
+  ├── calibrate.py            # AUROC + thresholds at 5 % / 1 % FPR from known human/AI folders
+  ├── ai_models.py            # Binoculars, Fast-DetectGPT (analytic), Desklib loaders/scorers
+  └── text_common.py          # shared with plagiarism-check (identical copy)
+  references/
+  ├── methods.md              # papers, licences, model pairs, measurements, rejected alternatives
+  └── paid-vs-free.md         # Turnitin/GPTZero/Originality vs this stack
+  ```
 
 ### `phd-report-presentation`
 
@@ -312,10 +386,18 @@ kpi_skills/
 │   │   ├── SKILL.md         # three modes: write a part, analyse a part, status of the whole brick
 │   │   ├── scripts/         # check_chapter.py, brick_status.py, brick_common.py, README.md
 │   │   └── references/      # requirements.md, chapter-playbook.md, review-checklist.md, style-guide.md, dissertation-examples.md, rules.md, sources/
-│   └── phd-seminar-review/
+│   ├── phd-seminar-review/
+│   │   ├── SKILL.md
+│   │   ├── scripts/         # check_deck.py, extract_deck.py, render_preview.py, deck_common.py
+│   │   └── references/      # requirements.md, rules.md, review-checklist.md, sample-structure.md
+│   ├── plagiarism-check/
+│   │   ├── SKILL.md
+│   │   ├── scripts/         # check_local.py, check_web.py, match_engine.py, plag_report.py, text_common.py
+│   │   └── references/      # methods.md, sources.md, requirements.md
+│   └── ai-text-detector/
 │       ├── SKILL.md
-│       ├── scripts/         # check_deck.py, extract_deck.py, render_preview.py, deck_common.py
-│       └── references/      # requirements.md, rules.md, review-checklist.md, sample-structure.md
+│       ├── scripts/         # detect_ai.py, calibrate.py, ai_models.py, text_common.py
+│       └── references/      # methods.md, paid-vs-free.md
 ├── .gitignore
 └── README.md
 ```
@@ -445,6 +527,25 @@ claude plugin marketplace update
 
 ```bash
 claude plugin validate /path/to/kpi_skills
+```
+
+`tests/plagiarism-check/test_plagiarism.py` builds a synthetic Ukrainian thesis, an external
+source and an "own publication" with python-docx, and checks extraction, exclusion of references
+and quotes, verbatim vs near-verbatim runs, own vs external similarity, tampering detection, the
+HTML/MD/JSON reports and the web checker's query selection (`KPI_SKILLS_NETWORK=1` adds one
+real ddgs/CORE search):
+
+```bash
+uv run tests/plagiarism-check/test_plagiarism.py
+```
+
+`tests/ai-text-detector/test_detector.py` checks extraction/chunking (docx, pdf, md), the
+calibration maths on synthetic score sets and the threshold directions offline;
+`KPI_SKILLS_HEAVY=1` adds a real Binoculars + Fast-DetectGPT run with the Qwen3-0.6B pair
+(~2.4 GB download):
+
+```bash
+uv run tests/ai-text-detector/test_detector.py
 ```
 
 ## Adding a new skill to the collection

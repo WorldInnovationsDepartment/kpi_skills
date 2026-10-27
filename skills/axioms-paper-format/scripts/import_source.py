@@ -433,8 +433,19 @@ def rename_envs(body: str, envmap: dict[str, str]) -> str:
 
 # ---------------------------------------------------------------- main conversion
 
+def strip_comment_lines(raw: str) -> str:
+    """strip_comments, then drop lines that held only a comment. TeX swallows such a line
+    completely, whereas an empty line would be a paragraph break (fatal inside a display)."""
+    out = []
+    for before, after in zip(raw.split("\n"), strip_comments(raw).split("\n")):
+        if before.strip() and not after.strip():
+            continue
+        out.append(after)
+    return "\n".join(out)
+
+
 def convert_tex(src_text: str, src_dir: Path, out_dir: Path, report: dict, todos: list[str]) -> dict[str, str]:
-    tex = strip_comments(flatten_inputs(src_text, src_dir))
+    tex = strip_comment_lines(flatten_inputs(src_text, src_dir))
     b = tex.find("\\begin{document}")
     e = tex.rfind("\\end{document}")
     if b < 0:

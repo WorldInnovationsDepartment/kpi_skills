@@ -112,6 +112,54 @@ def example_is_clean():
     assert not errs, errs
 
 
+REAL_EXAMPLE = SKILL_DIR / "assets" / "examples" / "en-discrete-optimization"
+
+
+@test
+def real_example_only_documented_placeholder_errors():
+    d = TMP / "real"
+    if d.exists():
+        shutil.rmtree(d)
+    shutil.copytree(REAL_EXAMPLE, d, ignore=shutil.ignore_patterns("draft", "import-report.md"))
+    shutil.copytree(DEFS, d / "Definitions")
+    code, items = findings(d / "paper.tex")
+    # The arXiv draft has no corresponding author, contributions, data-availability or
+    # conflict statement; they are TODO placeholders, so exactly these ERROR families are allowed.
+    allowed = {"front.corresponding", "front.corres", "template.todo"}
+    errs = [x for x in items if x["level"] == "ERROR"]
+    assert code != 0 and errs and codes(items, "ERROR") <= allowed, errs
+    todo_lines = " ".join(x["message"] for x in errs if x["code"] == "template.todo")
+    for key in ("corres", "authorcontributions", "dataavailability", "conflictsofinterest"):
+        assert key in todo_lines, (key, todo_lines)
+    s0 = (d / "paper.tex").read_text()
+    assert "no conflicts of interest" not in s0 and "Further inquiries" not in s0
+    s = (d / "paper.tex").read_text()
+    assert "\\begin{Lemma}" in s and "\\begin{proof}" in s and "\\begin{figure}" in s and "\\begin{table}" in s
+    assert (REAL_EXAMPLE / "README.md").exists() and (REAL_EXAMPLE / "draft").is_dir()
+
+
+@test
+def import_drops_comment_only_lines():
+    src = TMP / "cm.tex"
+    src.write_text(r"""\documentclass{article}
+\title{T}
+\author{A B}
+\begin{document}
+\maketitle
+\section{S}
+Text \[ x=1
+% a comment line
+\]
+done.
+\end{document}
+""")
+    out = TMP / "out-cm"
+    p = run(IMPORT, src, "--out", out)
+    assert p.returncode == 0, p.stderr
+    s = (out / "paper.tex").read_text()
+    assert "\n\n\\]" not in s and "comment line" not in s
+
+
 @test
 def example_has_required_parts():
     s = (EXAMPLE / "paper.tex").read_text()
