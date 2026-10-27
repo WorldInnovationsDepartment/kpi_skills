@@ -14,6 +14,44 @@ This repository is both a Claude Code **plugin** and its own **marketplace** —
 | `lnns-paper-format` | `kpi-skills:lnns-paper-format` | Formats and checks a paper for Springer's **Lecture Notes in Networks and Systems** (LNNS, [series page](https://link.springer.com/bookseries/15179)) in the proceedings template (llncs): Markdown+YAML source → Word `.docx` in the splnproc layout (122 × 193 mm, Times 10 pt, numbered headings, run-in level 3/4, bold "Fig. N."/"Table N." captions, numbered equations, Acknowledgments + Disclosure of Interests, splncs04 references) and/or an Overleaf-ready llncs LaTeX project, plus a rule-by-rule compliance report (abstract 150-250 words, title case, ORCID, one corresponding author, citation order, DOIs, alt text, conference page limit, Type 3 fonts). Sourced from Springer's 2026 instructions and a review of three 2025-2026 LNNS papers. |
 | `vottp-paper-format` | `kpi-skills:vottp-paper-format` | Formats and checks manuscripts for «Вимірювальна та обчислювальна техніка в технологічних процесах» ([vottp.khmnu.edu.ua](https://vottp.khmnu.edu.ua)): sourced requirements, three recent paper reviews, DOCX layout with content preservation, and a manual formatting/content compliance report. Records conflicting journal instructions explicitly. |
 | `phd-seminar-review` | `kpi-skills:phd-seminar-review` | Reviews the **content** of a PhD seminar / council / defence talk for specialty **121 «Інженерія програмного забезпечення»** at KPI (`.ppt`/`.pptx`/`.odp`/`.key`/`.pdf`): required elements, scientific novelty wording, the KPI 121 rule that one result must be a software **architecture**, tasks↔novelty↔conclusions, publication credit under Порядок №44, language and readability; writes a slide-by-slide report with fixes and likely council questions. |
+| `brick-writer-121` | `kpi-skills:brick-writer-121` | Writes and reviews a PhD dissertation («brick») for specialty **121 «Інженерія програмного забезпечення»** at KPI part by part: write mode drafts анотація/вступ/розділ N/висновки from the project's concept, novelty statements and facts following the genre of two bundled defended KPI 121 dissertations (Барабаш 2024, Бочок 2026, full texts + analysis) and the normative requirements (Постанова КМУ №44, наказ МОН №40, Стандарт №481); analyse mode runs `check_chapter.py` / `brick_status.py` (structure, figure/table/formula numbering, citations, novelty formula «вперше/удосконалено/дістало подальшого розвитку … відрізняється … дозволяє», mandatory вступ blocks, object = process, aim = result, 121 fit and the architecture rule, numbers traceable to tables, calques, placeholders, cross-part novelty drift) and writes an opponent-style review report. Never invents results, numbers or sources. |
+
+### `brick-writer-121`
+
+- **Triggers:** «brick», «напиши розділ 2 дисертації», «перевір вступ», «проаналізуй розділ»,
+  «чи збирається дисертація», "write chapter N of my dissertation", "review my PhD chapter",
+  or any request to write, check or review a part of a PhD dissertation («brick») for specialty
+  121 (F2) at KPI.
+- **Requirements:** [`uv`](https://docs.astral.sh/uv/) (PEP 723 scripts; only python-docx is
+  fetched). Input: `.md` (preferred), `.docx`, `.txt`; for PDF run `pdftotext -layout` first.
+- **Quick start:**
+  ```bash
+  S=skills/brick-writer-121/scripts
+  uv run $S/check_chapter.py brick/03-rozdil-2.md --chapter 2 --json review/rozdil-2.json
+  uv run $S/check_chapter.py brick/05-vysnovky.md --body brick/        # conclusions' numbers vs chapters
+  uv run $S/brick_status.py brick/ --novelty brick/novelty.md --md review/status.md
+  ```
+  Then Claude follows `SKILL.md` (write / analyse / status mode) with `references/chapter-playbook.md` or `references/review-checklist.md`.
+- **Internal layout** (`skills/brick-writer-121/`):
+  ```
+  SKILL.md                      # three modes: write a part -> analyse a part -> status of the whole brick
+  scripts/
+  ├── check_chapter.py          # ERROR/WARN/INFO per part: S/F/C/N/E/L rule codes, STRUCTURE, SUMMARY, --json
+  ├── brick_status.py           # inventory, page budget, B01–B07 cross-part checks (novelty drift, tasks↔conclusions …)
+  ├── brick_common.py           # loading .md/.docx/.txt, part detection, parsing of headings/captions/formulas/citations
+  └── README.md                 # script usage reference
+  references/
+  ├── requirements.md           # normative requirements with R-… codes (Постанова №44, наказ №40, Стандарт №481, KPI practice), sources and conflicts
+  ├── chapter-playbook.md       # writing recipe per part: fundament, анотація, 16 вступ blocks, розділ 1, результатні розділи, висновки, джерела; session protocol
+  ├── review-checklist.md       # analyse mode: per-part checklist, whole-dissertation traceability, opponent questions, report template, rule-code table
+  ├── style-guide.md            # scientific Ukrainian: register, terminology table, calques, sentence mechanics, micro-typography, self-edit pass
+  ├── dissertation-examples.md  # the two defended dissertations analysed: skeletons, page budgets, novelty verbatim, architecture result, weaknesses, line pointers
+  ├── rules.md                  # every script rule code: severity, trigger, limits, requirement codes
+  └── sources/                  # raw material: 3 gathered requirement documents; full texts of Барабаш 2024 (.md) and Бочок 2026 (.txt) + the Барабаш conspectus
+  ```
+- **When the rules change:** update `references/requirements.md`, `references/rules.md`, the scripts
+  and `tests/brick-writer-121/test_brick.py` together; when a newer defended 121 dissertation becomes
+  available, add its text under `references/sources/examples/` and extend `references/dissertation-examples.md`.
 
 ### `phd-seminar-review`
 
@@ -270,6 +308,10 @@ kpi_skills/
 │   │   ├── SKILL.md
 │   │   ├── scripts/         # vottp_docx.py: inspect, format and layout/preservation checks
 │   │   └── references/      # requirements, three-paper review, formatting workflow
+│   ├── brick-writer-121/
+│   │   ├── SKILL.md         # three modes: write a part, analyse a part, status of the whole brick
+│   │   ├── scripts/         # check_chapter.py, brick_status.py, brick_common.py, README.md
+│   │   └── references/      # requirements.md, chapter-playbook.md, review-checklist.md, style-guide.md, dissertation-examples.md, rules.md, sources/
 │   └── phd-seminar-review/
 │       ├── SKILL.md
 │       ├── scripts/         # check_deck.py, extract_deck.py, render_preview.py, deck_common.py
@@ -288,6 +330,16 @@ including stale role maps and deliberately damaged output:
 
 ```bash
 uv run tests/vottp-paper-format/test_vottp.py
+```
+
+`tests/brick-writer-121/test_brick.py` is a plain-assert suite for the `brick-writer-121` skill.
+It generates synthetic Ukrainian dissertation parts (вступ, розділ 2 with figures, tables, formulas
+and citations, висновки, and a `.docx` built with python-docx), checks every major rule on
+deliberately broken variants, the `brick_status.py` cross-part checks (B01 novelty drift, B02, B03,
+B07), JSON output, exit codes, and running from another working directory:
+
+```bash
+uv run tests/brick-writer-121/test_brick.py
 ```
 
 `tests/phd-seminar-review/test_seminar.py` generates synthetic 121 decks with python-pptx
