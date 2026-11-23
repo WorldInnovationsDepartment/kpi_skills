@@ -18,6 +18,40 @@ This repository is both a Claude Code **plugin** and its own **marketplace** —
 | `brick-writer-121` | `kpi-skills:brick-writer-121` | Writes and reviews a PhD dissertation («brick») for specialty **121 «Інженерія програмного забезпечення»** at KPI part by part: write mode drafts анотація/вступ/розділ N/висновки from the project's concept, novelty statements and facts following the genre of two bundled defended KPI 121 dissertations (Барабаш 2024, Бочок 2026, full texts + analysis) and the normative requirements (Постанова КМУ №44, наказ МОН №40, Стандарт №481); analyse mode runs `check_chapter.py` / `brick_status.py` (structure, figure/table/formula numbering, citations, novelty formula «вперше/удосконалено/дістало подальшого розвитку … відрізняється … дозволяє», mandatory вступ blocks, object = process, aim = result, 121 fit and the architecture rule, numbers traceable to tables, calques, placeholders, cross-part novelty drift) and writes an opponent-style review report. Never invents results, numbers or sources. |
 | `plagiarism-check` | `kpi-skills:plagiarism-check` | Rehearses the academic-plagiarism check of a dissertation/article (.docx/.pdf/.md/.tex/.txt, UA/EN) with free local tools before the official Unicheck scan: exact and near-verbatim reuse against a local corpus (own publications reported separately as self-reuse) and against pages harvested from the open web and open-access repositories (ddgs scraping, CORE, OpenAlex), optional multilingual paraphrase pass, Unicheck-style highlighted HTML report, reference list/quotes excluded, KPI-forbidden text tampering detected. **Not** a substitute for Unicheck/Turnitin: it has none of their private indexes, and every report says so. |
 | `ai-text-detector` | `kpi-skills:ai-text-detector` | Scores a manuscript for AI-generated text with open, local detectors: Binoculars and Fast-DetectGPT (zero-shot, Qwen3 base/instruct pairs that cover Ukrainian) and the Desklib DeBERTa classifier (English only), per ~220-word chunk, with a calibration script against the author's own known-human text and a report that states thresholds, provenance and measured error. Measured here: it detects text from small open models but **not** 2026 frontier-model prose (Claude) in Ukrainian or English — see the skill's `references/methods.md`; paid detectors are not reproducible for free. |
+| `ai-terms-ua-check` | `kpi-skills:ai-terms-ua-check` | Checks how AI/ML terms were translated from English into Ukrainian against the Ministry of Digital Transformation's [«Словник термінів у сфері штучного інтелекту 2.0»](https://thedigital.gov.ua/news/technologies/hovoryty-odniyeiu-movoiu-z-tekhnolohiiamy-onovyly-natsionalnyy-slovnyk-terminiv-zi-shtuchnoho-intelektu) (2026, 146 terms, bundled as JSON): with the English source it matches each dictionary term per paragraph to its recommended Ukrainian form; without it, it finds known non-dictionary variants (галюцинація, файн-тюнінг, вирівнювання …), terms left in Latin script and mixed synonyms. The report has two labelled parts: findings based on the dictionary (with entry №) and findings **not** based on it (calques, style, terms the dictionary lacks). |
+
+### `ai-terms-ua-check`
+
+1. **Triggers:** «перевір переклад термінів ШІ», «чи відповідає термінологія словнику Мінцифри»,
+   «як перекласти prompt / fine-tuning / alignment», "check the AI terminology in my Ukrainian
+   translation" — any Ukrainian text translated from English that uses AI/ML terms.
+2. **Requirements:** [`uv`](https://docs.astral.sh/uv/) (PEP 723: python-docx; the dictionary
+   builder also uses PyMuPDF); poppler `pdftotext` for PDF input and for rebuilding the dictionary.
+3. **Quick start:**
+   ```bash
+   S=skills/ai-terms-ua-check/scripts
+   uv run $S/check_terms.py uk.docx --source en.docx --md review/terms.md --json review/terms.json
+   uv run $S/check_terms.py uk.docx --md review/terms.md            # without the English source
+   ```
+   Then Claude verifies each finding in context, reads for the dictionary's confusable pairs
+   (Accuracy/Precision, Recall/Completeness, Alignment №136/№137 …) and writes the two-part report.
+4. **Scope:** the dictionary is a recommendation, not a binding standard. Only remarks that cite
+   an entry № are reported as «на основі словника Мінцифри»; everything else is labelled «поза
+   словником Мінцифри».
+5. **Internal layout** (`skills/ai-terms-ua-check/`):
+   ```
+   SKILL.md                     # workflow: intake -> script -> verify -> confusable pairs -> non-dictionary review -> report
+   scripts/
+   ├── check_terms.py           # P1–P3 (EN source vs UA), M2–M5 (UA only), S01–S16 / X1 (non-Mintsyfra)
+   └── build_dictionary.py      # rebuilds references/dictionary.json from the ministry PDF
+   references/
+   ├── dictionary.json          # 146 entries: uk, en, definition, related, page + derived variants/abbreviations
+   ├── known_variants.json      # non-dictionary renderings mapped to dictionary entries
+   ├── style_rules.json         # calques and usage rules — NOT from the dictionary
+   └── sources.md               # provenance, extraction caveats, what is ours vs the ministry's
+   ```
+6. **When the dictionary changes:** rebuild with `build_dictionary.py`, then run
+   `uv run tests/ai-terms-ua-check/test_ai_terms.py`.
 
 ### `brick-writer-121`
 
